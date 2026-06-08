@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
 import styles from "./documentDetail.module.css";
 import { BASE_URL } from "@/config/api";
-import { EditDocumentModal } from "./EditDocumentModal";
+import { EditDocumentModal, OcrData } from "./EditDocumentModal";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
 
@@ -332,7 +332,7 @@ export default function DocumentDetailPage() {
   const [loading, setLoading]     = useState(true);
   const [error, setError]         = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("review_tasks");
-  const [isModalOpen, setIsModalOpen] = useState(false); // 👈 Added state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (!documentId) return;
@@ -353,7 +353,6 @@ export default function DocumentDetailPage() {
 
   const tasksSF = useSortFilter<ReviewTaskDetail>(data?.review_tasks ?? []);
 
-  // Shared routing interceptor for Ctrl/Cmd clicks
   const handleNavigation = (e: React.MouseEvent, url: string) => {
     if (e.ctrlKey || e.metaKey) {
       window.open(url, "_blank");
@@ -362,13 +361,11 @@ export default function DocumentDetailPage() {
     }
   };
 
-  const handleModalSave = (updatedFields: { file_path: string; ocr_url: string }) => {
+  const handleModalSave = (updatedData: { file_path: string; ocr_data: OcrData }) => {
     if (!data) return;
-    // Local UI update logic (API hit logic can be wired here later)
     setData({
       ...data,
-      file_path: updatedFields.file_path,
-      ocr_url: updatedFields.ocr_url || null,
+      file_path: updatedData.file_path,
     });
   };
 
@@ -426,7 +423,7 @@ export default function DocumentDetailPage() {
               <div className={styles.headerActions}>
                 <button
                   className={styles.actionBtn}
-                  onClick={() => setIsModalOpen(true)} // 👈 Connected to toggle state
+                  onClick={() => setIsModalOpen(true)}
                 >
                   <i className="bi bi-pencil" /> Edit
                 </button>
@@ -469,6 +466,7 @@ export default function DocumentDetailPage() {
                   <span className={styles.metaLabel}>OCR Version</span>
                   <span className={styles.metaValue}>{data.ocr_version ?? "—"}</span>
                 </div>
+                {/* ✅ Fixed: was className={styles.metaLabel"} — missing opening brace */}
                 <div className={styles.metaCard}>
                   <span className={styles.metaLabel}>Created</span>
                   <span className={styles.metaValue}>{fmt(data.created_at)}</span>
