@@ -1,0 +1,504 @@
+/* ── Page Shell ─────────────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f0f3fb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Top Bar ────────────────────────────────────────────────────────────────── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem 0.75rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  flex-shrink: 0;
+}
+
+.topBarLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0d1b3e;
+  margin: 0;
+}
+
+.totalBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4e6fa3;
+  background: #dde8f8;
+  border-radius: 20px;
+  padding: 0.2rem 0.7rem;
+}
+
+/* ── Status Pill Bar ────────────────────────────────────────────────────────── */
+.pillBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #f7f9ff;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 34px;
+  padding: 0 0.9rem;
+  border-radius: 20px;
+  border: 1.5px solid #cdd5e8;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: #fff;
+  color: #4e6fa3;
+}
+
+.pill:hover { border-color: #4e8ef7; color: #1a2a50; }
+
+.pillPending.pillActive   { background: #fef3d4; color: #7a5c1a; border-color: #f5dda0; }
+.pillAssigned.pillActive  { background: #d4e8f8; color: #1a4a7a; border-color: #a8ccee; }
+.pillInReview.pillActive  { background: #e8d4f8; color: #4a3a7a; border-color: #cca8ee; }
+.pillCompleted.pillActive { background: #d4f5e5; color: #1a7a4a; border-color: #a8e6c8; }
+.pillRejected.pillActive  { background: #f8d4d4; color: #7a1a1a; border-color: #eea8a8; }
+.pillUnknown.pillActive   { background: #ececec; color: #3a3a3a; border-color: #b0b0b0; }
+
+.pillCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.08);
+  color: inherit;
+}
+
+/* ── Filters ────────────────────────────────────────────────────────────────── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #f7f9ff;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.7rem;
+  color: #9aa3bb;
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+
+.searchInput {
+  flex: 1;
+  width: 100%;
+  height: 36px;
+  padding: 0 2rem 0 2rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.searchInput:focus { border-color: #4e8ef7; }
+
+.searchClear {
+  position: absolute;
+  right: 0.5rem;
+  background: none;
+  border: none;
+  color: #9aa3bb;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+
+.searchClear:hover { color: #c0392b; }
+
+.select {
+  height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.select:focus { border-color: #4e8ef7; }
+
+.dateRange {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  background: #fff;
+  transition: border-color 0.15s;
+}
+
+.dateRange:focus-within { border-color: #4e8ef7; }
+
+.calIcon {
+  color: #9aa3bb;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.dateInput {
+  border: none;
+  outline: none;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  color: #1a2a50;
+  background: transparent;
+  cursor: pointer;
+  width: 110px;
+}
+
+.dateSep {
+  color: #9aa3bb;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.clearBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 36px;
+  padding: 0 0.85rem;
+  border: 1px solid #f0c0c0;
+  border-radius: 6px;
+  background: #fff5f5;
+  color: #c0392b;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s;
+  white-space: nowrap;
+}
+
+.clearBtn:hover { background: #ffe0e0; border-color: #e08080; }
+
+.resultCount {
+  font-size: 0.75rem;
+  color: #6b7a99;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* ── Table Wrapper ──────────────────────────────────────────────────────────── */
+.tableWrap {
+  flex: 1;
+  overflow: auto;
+  padding: 1.25rem 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.07);
+}
+
+.table thead tr {
+  background: #0d1b3e;
+  color: #c8d4f0;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.table th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #edf0f8;
+  transition: background 0.12s;
+}
+
+.table tbody tr:last-child { border-bottom: none; }
+.table tbody tr:hover { background: #f4f7ff; }
+
+.table td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* ── Clickable row ──────────────────────────────────────────────────────────── */
+.clickableRow { cursor: pointer; transition: background 0.12s, box-shadow 0.12s; }
+.clickableRow:hover  { background: #eef3ff !important; }
+.clickableRow:active { background: #e2eaff !important; }
+
+/* ── Cell variants ──────────────────────────────────────────────────────────── */
+.idCell {
+  font-family: monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6b7a99;
+  white-space: nowrap;
+}
+
+.docIdCell {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #9aa3bb;
+  white-space: nowrap;
+}
+
+.userCell {
+  font-weight: 600;
+  color: #0d1b3e;
+  white-space: nowrap;
+}
+
+.reasonCell {
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #4e6fa3;
+  font-style: italic;
+  font-size: 0.8rem;
+  cursor: default;
+}
+
+.dateCell {
+  color: #6b7a99;
+  white-space: nowrap;
+}
+
+.nullCell {
+  color: #c0c8d8;
+  font-size: 0.85rem;
+}
+
+/* ── Status Badge ───────────────────────────────────────────────────────────── */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 0.22rem 0.7rem;
+  white-space: nowrap;
+}
+
+.statusPending   { color: #7a5c1a; background: #fef3d4; border: 1px solid #f5dda0; }
+.statusAssigned  { color: #1a4a7a; background: #d4e8f8; border: 1px solid #a8ccee; }
+.statusInReview  { color: #4a3a7a; background: #e8d4f8; border: 1px solid #cca8ee; }
+.statusCompleted { color: #1a7a4a; background: #d4f5e5; border: 1px solid #a8e6c8; }
+.statusRejected  { color: #7a1a1a; background: #f8d4d4; border: 1px solid #eea8a8; }
+
+/* ── State: loading / error / empty ────────────────────────────────────────── */
+.stateWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 300px;
+  color: #9aa3bb;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(78, 142, 247, 0.15);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorText { color: #c0392b; font-size: 0.88rem; margin: 0; }
+
+.retryBtn {
+  padding: 0.4rem 1.2rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.emptyText { font-size: 0.9rem; color: #9aa3bb; margin: 0; }
+
+/* ── Sortable column headers ────────────────────────────────────────────────── */
+.sortableTh {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortableTh:hover { background: rgba(255, 255, 255, 0.08); }
+
+.thInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.sortIcon { font-size: 0.7rem; opacity: 0.8; }
+
+/* ── Pagination ─────────────────────────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem 2rem;
+  border-top: 1px solid #dde3f0;
+  flex-shrink: 0;
+  background: #f7f9ff;
+  flex-wrap: wrap;
+}
+
+.pageBtn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 0.5rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  background: #fff;
+  color: #1a2a50;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s, color 0.14s;
+}
+
+.pageBtn:hover:not(:disabled) { background: #e8edf8; border-color: #4e8ef7; }
+.pageBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.pageBtnActive {
+  background: #0d1b3e;
+  color: #fff;
+  border-color: #0d1b3e;
+  font-weight: 700;
+}
+
+.pageBtnActive:hover:not(:disabled) { background: #0d1b3e; }
+
+.ellipsis { color: #9aa3bb; font-size: 0.85rem; padding: 0 0.15rem; }
+.pageInfo  { font-size: 0.75rem; color: #6b7a99; margin-left: 0.5rem; }
+
+/* ── Assign Cell ────────────────────────────────────────────────────────────── */
+.assignCell { min-width: 160px; }
+
+.assignDropdown {
+  height: 32px;
+  padding: 0 0.6rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  color: #1a2a50;
+  background: #f7f9ff;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  max-width: 160px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.assignDropdown:hover  { border-color: #4e8ef7; background: #fff; }
+.assignDropdown:focus  { border-color: #4e8ef7; background: #fff; }
+
+.assignSpinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(78, 142, 247, 0.2);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+
+/* ── Language badge ─────────────────────────────────────────────────────────── */
+.langCell { white-space: nowrap; }
+
+.langBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--color-accent, #6366f1) 12%, transparent);
+  color: var(--color-accent, #6366f1);
+}
+
+.annotatorName {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+}

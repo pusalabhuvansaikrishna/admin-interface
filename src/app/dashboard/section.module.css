@@ -1,0 +1,36 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+/* ── Section Header bar ─────────────────── */
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #f0f3fb;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: camel;
+  color: #0d1b3e;
+  margin: 0;
+}
+
+/* ── Main content area ──────────────────── */
+.content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}

@@ -1,0 +1,1304 @@
+/* ── Page Shell ─────────────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f0f3fb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Top Bar ────────────────────────────────────────────────────────────────── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem 0.75rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  flex-shrink: 0;
+}
+
+.topBarLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0d1b3e;
+  margin: 0;
+}
+
+.totalBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4e6fa3;
+  background: #dde8f8;
+  border-radius: 20px;
+  padding: 0.2rem 0.7rem;
+}
+
+/* ── New Annotator Button ───────────────────────────────────────────────────── */
+.newBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s;
+  white-space: nowrap;
+}
+
+.newBtn:hover { background: #1a2f6e; }
+
+/* ── Filters ────────────────────────────────────────────────────────────────── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #f7f9ff;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
+  height: 36px;
+  padding: 0 0.85rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.searchInput:focus { border-color: #4e8ef7; }
+
+.select {
+  height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.select:focus { border-color: #4e8ef7; }
+
+/* ── Table Wrapper ──────────────────────────────────────────────────────────── */
+.tableWrap {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 1.25rem 2rem;
+}
+
+.tableBox {
+  border-radius: 10px;
+  overflow: visible;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.07);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  border-radius: 10px;
+  overflow: visible;
+  box-shadow: none;
+}
+
+.table thead tr {
+  background: #0d1b3e;
+  color: #c8d4f0;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.table th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #edf0f8;
+  transition: background 0.12s;
+}
+
+.table tbody tr:last-child { border-bottom: none; }
+
+/* ── Clickable row ──────────────────────────────────────────────────────────── */
+.clickableRow {
+  cursor: pointer;
+}
+
+.clickableRow:hover {
+  background: #f0f5ff;
+}
+
+.clickableRow:hover .nameCell {
+  color: #2d5be3;
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* ── Cell variants ──────────────────────────────────────────────────────────── */
+.idCell       { font-weight: 600; color: #6b7a99; width: 60px; }
+.nameCell     { font-weight: 600; color: #0d1b3e; transition: color 0.12s; }
+.usernameCell { font-family: monospace; font-size: 0.8rem; color: #4e6fa3; }
+.emailCell    { color: #1a2a50; }
+.numCell      { text-align: center; font-weight: 600; color: #1a2a50; }
+.dateCell     { color: #6b7a99; white-space: nowrap; }
+
+/* ── Name cell with mini avatar ─────────────────────────────────────────────── */
+.nameWithAvatar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.miniAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3a7e 0%, #2d5be3 100%);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Languages cell (table) ─────────────────────────────────────────────────── */
+.langCell {
+  max-width: 200px;
+}
+
+.langTableTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.langTableTag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #e8f0fe;
+  color: #1a56db;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border: 1px solid #c3d3f7;
+  white-space: nowrap;
+}
+
+.langTableTagMore {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f0f3fb;
+  color: #6b7a99;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 1px solid #dde3f0;
+  white-space: nowrap;
+}
+
+.noLang {
+  color: #b0b8cc;
+  font-size: 0.85rem;
+}
+
+/* ── Status Badge ───────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 0.2rem 0.65rem;
+}
+
+.badgeActive   { color: #1a7a4a; background: #d4f5e5; border: 1px solid #a8e6c8; }
+.badgeInactive { color: #7a3a1a; background: #f5e0d4; border: 1px solid #e6c0a8; }
+
+/* ── State: loading / error / empty ────────────────────────────────────────── */
+.stateWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 300px;
+  color: #9aa3bb;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(78, 142, 247, 0.15);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorText { color: #c0392b; font-size: 0.88rem; margin: 0; }
+
+.retryBtn {
+  padding: 0.4rem 1.2rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.emptyText { font-size: 0.9rem; color: #9aa3bb; margin: 0; }
+
+/* ── Pagination ─────────────────────────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem 2rem;
+  border-top: 1px solid #dde3f0;
+  flex-shrink: 0;
+  background: #f7f9ff;
+  flex-wrap: wrap;
+}
+
+.pageBtn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 0.5rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  background: #fff;
+  color: #1a2a50;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s, color 0.14s;
+}
+
+.pageBtn:hover:not(:disabled) { background: #e8edf8; border-color: #4e8ef7; }
+.pageBtn:disabled              { opacity: 0.35; cursor: not-allowed; }
+
+.pageBtnActive {
+  background: #0d1b3e;
+  color: #fff;
+  border-color: #0d1b3e;
+  font-weight: 700;
+}
+.pageBtnActive:hover:not(:disabled) { background: #0d1b3e; }
+
+.ellipsis { color: #9aa3bb; font-size: 0.85rem; padding: 0 0.15rem; }
+.pageInfo  { font-size: 0.75rem; color: #6b7a99; margin-left: 0.5rem; }
+
+/* ── Modal Backdrop ─────────────────────────────────────────────────────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 28, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Modal Box ──────────────────────────────────────────────────────────────── */
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.18s ease;
+  overflow: visible;
+  max-height: 92vh;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Modal Header ───────────────────────────────────────────────────────────── */
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #edf0f8;
+  flex-shrink: 0;
+  border-radius: 12px 12px 0 0;
+}
+
+.modalTitle {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0d1b3e;
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9aa3bb;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: color 0.14s, background 0.14s;
+}
+.closeBtn:hover    { color: #0d1b3e; background: #f0f3fb; }
+.closeBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Modal Body ─────────────────────────────────────────────────────────────── */
+.modalBody {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  overflow: visible;
+  flex: 1;
+}
+
+.modalSubtitle {
+  font-size: 0.83rem;
+  color: #6b7a99;
+  margin: 0 0 0.25rem 0;
+}
+
+/* ── Form Fields ────────────────────────────────────────────────────────────── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #6b7a99;
+}
+
+.input {
+  width: 100%;
+  height: 38px;
+  padding: 0 0.85rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  color: #1a2a50;
+  background: #f7f9ff;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s, background 0.15s;
+}
+.input:focus    { border-color: #4e8ef7; background: #fff; }
+.input:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Input with @ prefix ────────────────────────────────────────────────────── */
+.inputPrefix {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cdd5e8;
+  border-radius: 7px;
+  background: #f7f9ff;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.inputPrefix:focus-within { border-color: #4e8ef7; background: #fff; }
+
+.prefix {
+  padding: 0 0.65rem;
+  color: #9aa3bb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #edf0f8;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #cdd5e8;
+  flex-shrink: 0;
+}
+
+.inputWithPrefix {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  flex: 1;
+}
+.inputWithPrefix:focus { border-color: transparent; background: transparent; }
+
+/* ── Input with eye suffix ──────────────────────────────────────────────────── */
+.inputSuffix {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cdd5e8;
+  border-radius: 7px;
+  background: #f7f9ff;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+.inputSuffix:focus-within { border-color: #4e8ef7; background: #fff; }
+
+.inputWithSuffix {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  flex: 1;
+}
+.inputWithSuffix:focus { border-color: transparent; background: transparent; }
+
+.eyeBtn {
+  background: none;
+  border: none;
+  padding: 0 0.75rem;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #9aa3bb;
+  font-size: 0.95rem;
+  transition: color 0.14s;
+  flex-shrink: 0;
+}
+.eyeBtn:hover { color: #4e6fa3; }
+
+/* ── Form Error ─────────────────────────────────────────────────────────────── */
+.formError {
+  font-size: 0.8rem;
+  color: #c0392b;
+  background: #fdf0ee;
+  border: 1px solid #f5c6c0;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ── Success State ──────────────────────────────────────────────────────────── */
+.successWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+}
+
+.successText {
+  font-size: 0.88rem;
+  color: #1a7a4a;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Modal Footer ───────────────────────────────────────────────────────────── */
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 1rem 1.5rem 1.25rem 1.5rem;
+  border-top: 1px solid #edf0f8;
+  flex-shrink: 0;
+  border-radius: 0 0 12px 12px;
+}
+
+.cancelBtn {
+  padding: 0.5rem 1.1rem;
+  background: #fff;
+  color: #4e6fa3;
+  border: 1px solid #cdd5e8;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+.cancelBtn:hover:not(:disabled) { background: #f0f3fb; }
+.cancelBtn:disabled              { opacity: 0.5; cursor: not-allowed; }
+
+.createBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.3rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.createBtn:hover:not(:disabled) { background: #1a2f6e; }
+.createBtn:disabled              { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Button Spinner ─────────────────────────────────────────────────────────── */
+.btnSpinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  display: inline-block;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   LANGUAGE FIELD (modal form)
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.langTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.langTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 10px;
+  border-radius: 999px;
+  background: #e8f0fe;
+  color: #1a56db;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid #c3d3f7;
+}
+
+.langTagRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #1a56db;
+  padding: 0;
+  font-size: 0.85rem;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.langTagRemove:hover { opacity: 1; }
+
+.langTagReadonly {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #f0f3fb;
+  color: #6b7a99;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid #dde3f0;
+}
+
+.langTagRemovable {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 10px;
+  border-radius: 999px;
+  background: #f0f3fb;
+  color: #4e6fa3;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border: 1px solid #dde3f0;
+  transition: background 0.15s, border-color 0.15s, padding-right 0.15s;
+}
+
+.langTagRemovable:hover {
+  background: #fdecea;
+  border-color: #f5a8a0;
+  color: #c0392b;
+  padding-right: 4px;
+}
+
+.langTagRemovable:hover .langTagMinus {
+  width: 18px;
+  opacity: 1;
+}
+
+.langTagLabel {
+  flex: 1;
+  white-space: nowrap;
+}
+
+.langTagMinus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #c0392b;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1;
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: width 0.15s ease, opacity 0.15s ease;
+}
+.langTagMinus:disabled { cursor: not-allowed; opacity: 0.4; }
+
+.langTagRemoving {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.langTagSpinner {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 2px solid rgba(192, 57, 43, 0.2);
+  border-top-color: #c0392b;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* ── Dropdown wrapper ── */
+.langDropdownWrap {
+  position: relative;
+}
+
+.langTrigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.langTriggerText {
+  color: inherit;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.langChevron {
+  font-size: 0.75rem;
+  margin-left: 8px;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.langDropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 300;
+  background: #fff;
+  border: 1px solid #cdd5e8;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+}
+
+.langSearchWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #edf0f8;
+  color: #9aa3bb;
+  font-size: 0.85rem;
+}
+
+.langSearchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.84rem;
+  font-family: "Segoe UI", sans-serif;
+  color: #1a2a50;
+  background: transparent;
+}
+.langSearchInput::placeholder { color: #b0b8cc; }
+
+.langSearchClear {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b0b8cc;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: color 0.14s;
+  flex-shrink: 0;
+}
+.langSearchClear:hover { color: #4e6fa3; }
+
+.langList {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  max-height: 180px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cdd5e8 transparent;
+}
+.langList::-webkit-scrollbar       { width: 4px; }
+.langList::-webkit-scrollbar-thumb { background: #cdd5e8; border-radius: 4px; }
+
+.langItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  font-size: 0.84rem;
+  font-family: "Segoe UI", sans-serif;
+  color: #1a2a50;
+  cursor: pointer;
+  transition: background 0.1s;
+  list-style: none;
+  gap: 8px;
+}
+.langItem:hover { background: #f4f7ff; }
+
+.langItemHighlighted { background: #edf2ff; }
+
+.langItemSelected { color: #1a56db; font-weight: 500; }
+.langItemSelected:hover                 { background: #e8f0fe; }
+.langItemHighlighted.langItemSelected   { background: #dce8ff; }
+
+.langItemLabel {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.langItemCheck {
+  color: #1a56db;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.langNoResult {
+  padding: 14px 12px;
+  text-align: center;
+  font-size: 0.84rem;
+  color: #9aa3bb;
+  list-style: none;
+}
+
+.langDropdownFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-top: 1px solid #edf0f8;
+  background: #f7f9ff;
+}
+
+.langFooterHint {
+  font-size: 0.72rem;
+  color: #9aa3bb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.langDoneBtn {
+  padding: 4px 14px;
+  border-radius: 6px;
+  border: 1px solid #1a56db;
+  background: #1a56db;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: "Segoe UI", sans-serif;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.langDoneBtn:hover { background: #1648c0; }
+
+/* ════════════════════════════════════════════════════════════════════════════
+   THREE-DOT ACTION MENU
+   ════════════════════════════════════════════════════════════════════════════ */
+
+.actionCell {
+  width: 48px;
+  text-align: center;
+}
+
+.menuWrap {
+  position: relative;
+  display: inline-block;
+}
+
+.dotsBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9aa3bb;
+  font-size: 1rem;
+  padding: 4px 6px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.13s, color 0.13s;
+}
+.dotsBtn:hover { background: #edf0f8; color: #0d1b3e; }
+
+.dropMenu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 200;
+  background: #fff;
+  border: 1px solid #dde3f0;
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  min-width: 170px;
+  padding: 4px 0;
+  animation: fadeIn 0.12s ease;
+}
+
+.dropItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  text-align: left;
+  transition: background 0.11s;
+}
+.dropItem:hover { background: #f4f7ff; color: #0d1b3e; }
+
+/* ── Status Toggle Button ───────────────────────────────────────────────────── */
+.toggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background 0.18s, border-color 0.18s, opacity 0.18s;
+  white-space: nowrap;
+}
+
+.toggleBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.toggleBtnActive {
+  color: #1a7a4a;
+  background: #d4f5e5;
+  border-color: #a8e6c8;
+}
+.toggleBtnActive:not(:disabled):hover {
+  background: #fdecea;
+  border-color: #f5a8a0;
+  color: #c0392b;
+}
+
+.toggleBtnInactive {
+  color: #7a3a1a;
+  background: #f5e0d4;
+  border-color: #e6c0a8;
+}
+.toggleBtnInactive:not(:disabled):hover {
+  background: #d4f5e5;
+  border-color: #a8e6c8;
+  color: #1a7a4a;
+}
+
+/* ── Toggle switch track + thumb ────────────────────────────────────────────── */
+.toggleTrack {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 14px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  transition: background 0.18s;
+}
+
+.toggleBtnActive .toggleTrack   { background: #1a7a4a; }
+.toggleBtnInactive .toggleTrack { background: #c4b5a8; }
+
+/* hover: show what it would flip to */
+.toggleBtnActive:not(:disabled):hover .toggleTrack   { background: #c0392b; }
+.toggleBtnInactive:not(:disabled):hover .toggleTrack { background: #1a7a4a; }
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.18s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+
+.toggleBtnActive .toggleThumb   { left: 14px; }
+.toggleBtnInactive .toggleThumb { left: 2px; }
+
+/* ── Toggle label text ──────────────────────────────────────────────────────── */
+.toggleLabel {
+  line-height: 1;
+}
+
+/* ── Inline spinner for toggling state ──────────────────────────────────────── */
+.toggleSpinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+.toggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background 0.18s, border-color 0.18s, opacity 0.18s;
+  white-space: nowrap;
+}
+
+.toggleBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.toggleBtnActive {
+  color: #1a7a4a;
+  background: #d4f5e5;
+  border-color: #a8e6c8;
+}
+.toggleBtnActive:not(:disabled):hover {
+  background: #fdecea;
+  border-color: #f5a8a0;
+  color: #c0392b;
+}
+
+.toggleBtnInactive {
+  color: #7a3a1a;
+  background: #f5e0d4;
+  border-color: #e6c0a8;
+}
+.toggleBtnInactive:not(:disabled):hover {
+  background: #d4f5e5;
+  border-color: #a8e6c8;
+  color: #1a7a4a;
+}
+
+/* ── Toggle switch track + thumb ────────────────────────────────────────────── */
+.toggleTrack {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 14px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  transition: background 0.18s;
+}
+
+.toggleBtnActive .toggleTrack   { background: #1a7a4a; }
+.toggleBtnInactive .toggleTrack { background: #c4b5a8; }
+
+.toggleBtnActive:not(:disabled):hover .toggleTrack   { background: #c0392b; }
+.toggleBtnInactive:not(:disabled):hover .toggleTrack { background: #1a7a4a; }
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.18s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+
+.toggleBtnActive .toggleThumb   { left: 14px; }
+.toggleBtnInactive .toggleThumb { left: 2px; }
+
+/* ── Toggle label text ──────────────────────────────────────────────────────── */
+.toggleLabel {
+  line-height: 1;
+}
+
+/* ── Inline spinner for toggling state ──────────────────────────────────────── */
+.toggleSpinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+
+/* ── Dropdown divider + danger item ─────────────────────────────────────────── */
+.dropDivider {
+  height: 1px;
+  background: #edf0f8;
+  margin: 4px 0;
+}
+
+.dropItemDanger {
+  color: #c0392b !important;
+}
+.dropItemDanger:hover {
+  background: #fdecea !important;
+  color: #a93226 !important;
+}
+
+/* ── Delete Confirmation Modal ───────────────────────────────────────────────── */
+.deleteConfirmWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0 0.25rem;
+}
+
+.deleteIconWrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fdecea;
+  border: 1px solid #f5c6c0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #c0392b;
+  flex-shrink: 0;
+}
+
+.deleteConfirmText {
+  font-size: 0.88rem;
+  color: #0d1b3e;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.deleteUsername {
+  color: #6b7a99;
+  font-weight: 400;
+}
+
+.deleteConfirmSub {
+  font-size: 0.78rem;
+  color: #9aa3bb;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.deleteConfirmBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.3rem;
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+.deleteConfirmBtn:hover:not(:disabled) { background: #a93226; }
+.deleteConfirmBtn:disabled             { opacity: 0.6; cursor: not-allowed; }
+
+.toggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background 0.18s, border-color 0.18s, opacity 0.18s;
+  white-space: nowrap;
+}
+
+.toggleBtn:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.toggleBtnActive {
+  color: #1a7a4a;
+  background: #d4f5e5;
+  border-color: #a8e6c8;
+}
+.toggleBtnActive:not(:disabled):hover {
+  background: #fdecea;
+  border-color: #f5a8a0;
+  color: #c0392b;
+}
+
+.toggleBtnInactive {
+  color: #7a3a1a;
+  background: #f5e0d4;
+  border-color: #e6c0a8;
+}
+.toggleBtnInactive:not(:disabled):hover {
+  background: #d4f5e5;
+  border-color: #a8e6c8;
+  color: #1a7a4a;
+}
+
+/* ── Toggle switch track + thumb ────────────────────────────────────────────── */
+.toggleTrack {
+  position: relative;
+  display: inline-block;
+  width: 26px;
+  height: 14px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  transition: background 0.18s;
+}
+
+.toggleBtnActive .toggleTrack   { background: #1a7a4a; }
+.toggleBtnInactive .toggleTrack { background: #c4b5a8; }
+
+/* hover: show what it would flip to */
+.toggleBtnActive:not(:disabled):hover .toggleTrack   { background: #c0392b; }
+.toggleBtnInactive:not(:disabled):hover .toggleTrack { background: #1a7a4a; }
+
+.toggleThumb {
+  position: absolute;
+  top: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  transition: left 0.18s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+
+.toggleBtnActive .toggleThumb   { left: 14px; }
+.toggleBtnInactive .toggleThumb { left: 2px; }
+
+/* ── Toggle label text ──────────────────────────────────────────────────────── */
+.toggleLabel {
+  line-height: 1;
+}
+
+/* ── Inline spinner for toggling state ──────────────────────────────────────── */
+.toggleSpinner {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  opacity: 0.7;
+  flex-shrink: 0;
+}

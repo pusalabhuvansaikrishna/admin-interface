@@ -1,0 +1,768 @@
+/* ── Page Shell ─────────────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f0f3fb;
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+/* ── Two-Column Layout ──────────────────────────────────────────────────────── */
+.mainLayout {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: auto;
+}
+
+/* ── Right Column: Preview ──────────────────────────────────────────────────── */
+.previewCol {
+  width: 380px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #dde3f0;
+  background: #f7f9ff;
+  overflow: hidden;
+}
+
+.previewHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.previewTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9aa3bb;
+}
+
+.previewFileName {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #0d1b3e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.previewBody {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+/* ── Preview Renderers ──────────────────────────────────────────────────────── */
+.previewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid #dde3f0;
+  background: #fff;
+  display: block;
+}
+
+.previewFrame {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 1px solid #dde3f0;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.previewUnsupported {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  height: 100%;
+  color: #9aa3bb;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+.header {
+  padding: 0.75rem 2rem 0.65rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4e6fa3;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.5rem;
+  transition: color 0.14s;
+}
+.backBtn:hover { color: #0d1b3e; }
+
+.headerMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0d1b3e;
+  margin: 0;
+  word-break: break-all;
+}
+
+.idBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7a99;
+  background: #edf0f8;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+  white-space: nowrap;
+}
+
+.headerActions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fff;
+  background: #4e8ef7;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.14s;
+  white-space: nowrap;
+}
+.actionBtn:hover { background: #2e6fd4; }
+
+.actionBtnSecondary {
+  background: #f0f3fb;
+  color: #4e6fa3;
+  border: 1px solid #dde3f0;
+}
+.actionBtnSecondary:hover { background: #e0e6f5; color: #0d1b3e; }
+
+/* ── Meta Grid ──────────────────────────────────────────────────────────────── */
+.metaGrid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;          /* cards drop to next line if no room */
+  gap: 0.65rem;
+  padding: 0.65rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #f7f9ff;
+  flex-shrink: 0;
+}
+
+/* Each section is ONE card — min 260px, grows to fill */
+.metaSection {
+  flex: 1 1 260px;
+  background: #fff;
+  border: 1px solid #dde3f0;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.metaSectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9aa3bb;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #edf0f8;
+}
+
+/* Fields inside a card: each field auto-width, no truncation */
+.metaCards {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.metaCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0 0.8rem;
+  border-right: 1px solid #edf0f8;
+  flex: 0 0 auto;           /* size to content — no squishing */
+}
+.metaCard:first-child { padding-left: 0; }
+.metaCard:last-child  { border-right: none; padding-right: 0; }
+
+/* Clickable variant */
+.metaCardClickable {
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.14s;
+  padding-top: 0.15rem;
+  padding-bottom: 0.15rem;
+}
+.metaCardClickable:hover { background: #f0f5ff; }
+
+.metaLabel {
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #b0bac8;
+  white-space: nowrap;
+}
+
+.metaValue {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #0d1b3e;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.metaLink { color: #4e8ef7; }
+
+.metaSub {
+  font-size: 0.69rem;
+  color: #6b7a99;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* ── Tabs ───────────────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.1rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7a99;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+  margin-bottom: -1px;
+}
+.tab:hover { color: #0d1b3e; }
+
+.tabActive {
+  color: #0d1b3e;
+  border-bottom-color: #4e8ef7;
+}
+
+.tabCount {
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: #edf0f8;
+  color: #4e6fa3;
+  border-radius: 20px;
+  padding: 0.1rem 0.5rem;
+}
+.tabActive .tabCount {
+  background: #dde8f8;
+  color: #1a4a7a;
+}
+
+/* ── Tab Content ────────────────────────────────────────────────────────────── */
+.tabContent {
+  flex: 1;
+  overflow: auto;
+  padding: 1.25rem 2rem;
+}
+
+/* ── Table ──────────────────────────────────────────────────────────────────── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+}
+
+.table thead tr {
+  background: #0d1b3e;
+  color: #c8d4f0;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.table th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #edf0f8;
+  transition: background 0.12s;
+}
+.table tbody tr:last-child { border-bottom: none; }
+.table tbody tr:hover { background: #f4f7ff; }
+
+.table td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* ── Cell variants ──────────────────────────────────────────────────────────── */
+.idCell   { font-weight: 600; color: #6b7a99; width: 60px; }
+.numCell  { text-align: center; font-weight: 600; }
+.dateCell { color: #6b7a99; white-space: nowrap; font-size: 0.78rem; }
+
+.reasonCell {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #4e6fa3;
+}
+
+.emptyCell {
+  text-align: center;
+  color: #9aa3bb;
+  padding: 2.5rem !important;
+  font-size: 0.85rem;
+}
+
+/* ── Status Badge ───────────────────────────────────────────────────────────── */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 0.22rem 0.7rem;
+  white-space: nowrap;
+}
+
+.statusQueued     { color: #7a5c1a; background: #fef3d4; border: 1px solid #f5dda0; }
+.statusProcessing { color: #1a4a7a; background: #d4e8f8; border: 1px solid #a8ccee; }
+.statusCompleted  { color: #1a7a4a; background: #d4f5e5; border: 1px solid #a8e6c8; }
+.statusFailed     { color: #7a1a1a; background: #f8d4d4; border: 1px solid #eea8a8; }
+.statusPartial    { color: #4a3a7a; background: #e8d4f8; border: 1px solid #cca8ee; }
+
+/* ── Job Card ───────────────────────────────────────────────────────────────── */
+.jobCard {
+  background: #fff;
+  border: 1px solid #dde3f0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 640px;
+  cursor: pointer;
+  transition: border-color 0.14s, box-shadow 0.14s;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+}
+.jobCard:hover {
+  border-color: #4e8ef7;
+  box-shadow: 0 4px 16px rgba(78,142,247,0.12);
+}
+
+.jobCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.jobCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.jobIdBadge {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0d1b3e;
+}
+
+.jobCardHint {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4e8ef7;
+}
+
+.jobStats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.jobStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.jobStatValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0d1b3e;
+  line-height: 1;
+}
+
+.jobStatLabel {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9aa3bb;
+}
+
+.jobStatSuccess .jobStatValue { color: #1a7a4a; }
+.jobStatDanger  .jobStatValue { color: #c0392b; }
+
+/* ── Progress bar ───────────────────────────────────────────────────────────── */
+.progressWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.progressBar {
+  flex: 1;
+  height: 6px;
+  background: #edf0f8;
+  border-radius: 99px;
+  overflow: hidden;
+  display: flex;
+}
+
+.progressFill {
+  height: 100%;
+  background: #1a7a4a;
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+
+.progressFillFailed {
+  height: 100%;
+  background: #c0392b;
+  border-radius: 99px;
+}
+
+.progressLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7a99;
+  white-space: nowrap;
+}
+
+/* ── Job Dates ──────────────────────────────────────────────────────────────── */
+.jobDates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #edf0f8;
+}
+
+.jobDateItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.jobDateLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #9aa3bb;
+}
+
+.jobDateValue {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #4e6fa3;
+}
+
+/* ── Empty State ────────────────────────────────────────────────────────────── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem;
+  color: #9aa3bb;
+  font-size: 0.85rem;
+}
+
+/* ── State: loading / error ─────────────────────────────────────────────────── */
+.stateWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 100%;
+  min-height: 300px;
+  color: #9aa3bb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(78,142,247,0.15);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorText { color: #c0392b; font-size: 0.88rem; margin: 0; }
+
+/* ── Tab Toolbar ────────────────────────────────────────────────────────────── */
+.tabToolbar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tabSearch {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.45rem 0.85rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  border: 1px solid #dde3f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #0d1b3e;
+  outline: none;
+  transition: border-color 0.14s;
+}
+.tabSearch:focus { border-color: #4e8ef7; }
+
+.tabSelect {
+  padding: 0.45rem 0.75rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  border: 1px solid #dde3f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #0d1b3e;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.14s;
+}
+.tabSelect:focus { border-color: #4e8ef7; }
+
+.dateRangeWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.dateRangeLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7a99;
+  white-space: nowrap;
+}
+
+.dateInput {
+  padding: 0.45rem 0.75rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  border: 1px solid #dde3f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #0d1b3e;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.14s;
+}
+.dateInput:focus { border-color: #4e8ef7; }
+
+.clearDateBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7a99;
+  background: #f0f3fb;
+  border: 1px solid #dde3f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+  white-space: nowrap;
+}
+.clearDateBtn:hover { background: #e0e6f5; color: #0d1b3e; }
+
+/* ── Modal Layout ───────────────────────────────────────────────────────────── */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modalContainer {
+  background: #ffffff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid #eef2f6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.modalCloseBtn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #64748b;
+  transition: color 0.2s;
+  padding: 4px;
+}
+.modalCloseBtn:hover { color: #1e293b; }
+
+.modalForm {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formGroup label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.formGroup input {
+  width: 100%;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+  border-top: 1px solid #eef2f6;
+  padding-top: 16px;
+}

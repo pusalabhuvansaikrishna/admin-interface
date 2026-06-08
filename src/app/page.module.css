@@ -1,0 +1,290 @@
+/* ===== Vishva Setu Admin Portal — Login Page Styles ===== */
+
+/* ---------- Page Shell ---------- */
+.page {
+  min-height: 100vh;
+  min-height: 100dvh; /* dynamic viewport height for mobile browsers */
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---------- Header ---------- */
+.header {
+  background-color: #1a2e5a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
+  height: clamp(56px, 10vh, 80px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+  gap: 0.75rem;
+}
+
+.logoWrap {
+  position: relative;
+  flex-shrink: 0;
+  width: clamp(70px, 12vw, 120px);
+  height: clamp(35px, 6vw, 60px);
+}
+
+.logoImg {
+  object-fit: contain;
+  object-position: left center;
+}
+
+.portalTitle {
+  color: #ffffff;
+  font-size: clamp(0.65rem, 2.2vw, 1.45rem);
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  margin: 0;
+  font-family: var(--font-bebas), "Georgia", serif;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  text-align: right;
+  line-height: 1.2;
+  /* Allow title to shrink but not wrap awkwardly on very small screens */
+  min-width: 0;
+  word-break: break-word;
+}
+
+/* ---------- Main Content ---------- */
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* fluid gap: shrinks from 20rem on large screens to 2rem on small */
+  gap: clamp(2rem, 8vw, 20rem);
+  padding: clamp(1.5rem, 4vh, 3rem) clamp(1rem, 5vw, 4rem);
+
+  /* Switch to column on narrow viewports */
+  flex-wrap: wrap;
+}
+
+/* ---------- Illustration ---------- */
+.illustrationWrap {
+  position: relative;
+  flex: 0 1 auto;
+  /* Fluid width: min 160px, preferred 35vw, max 480px */
+  width: clamp(160px, 35vw, 480px);
+  /* Keep aspect ratio */
+  aspect-ratio: 320 / 380;
+}
+
+.illustration {
+  object-fit: contain;
+}
+
+/* ---------- Login Card ---------- */
+.cardWrap {
+  flex: 0 1 auto;
+  width: 100%;
+  max-width: 420px;
+  /* Ensure card doesn't grow wider than the illustration on large screens */
+  min-width: min(100%, 280px);
+}
+
+.card {
+  background: #ffffff;
+  border-radius: clamp(12px, 2vw, 20px);
+  border: 2px solid #1a2e5a;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 5vw, 3.5rem);
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow:
+    0 8px 32px rgba(26, 46, 90, 0.12),
+    0 2px 8px rgba(26, 46, 90, 0.08);
+  animation: slideIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---------- Form Fields ---------- */
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: clamp(1rem, 2.5vh, 1.4rem);
+}
+
+.label {
+  color: #1a2e5a;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  font-family: var(--font-bebas), sans-serif;
+}
+
+.input {
+  width: 100%;
+  padding: clamp(0.5rem, 1.5vh, 0.65rem) clamp(0.7rem, 2vw, 0.9rem);
+  border: 2px solid #1a2e5a;
+  border-radius: 8px;
+  font-size: clamp(0.875rem, 2vw, 0.95rem);
+  color: #1a2e5a;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+  /* Prevent zoom on iOS when font-size < 16px */
+  font-size: max(16px, 0.95rem);
+}
+
+.input:focus {
+  border-color: #2e4fa3;
+  box-shadow: 0 0 0 3px rgba(46, 79, 163, 0.15);
+}
+
+.input::placeholder {
+  color: #b0b8cc;
+}
+
+/* ---------- Error Message ---------- */
+.error {
+  color: #c0392b;
+  font-size: clamp(0.78rem, 1.5vw, 0.82rem);
+  margin: -0.5rem 0 0.8rem 0;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* ---------- Login Button ---------- */
+.btnWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(1.2rem, 3vh, 1.8rem);
+}
+
+.loginBtn {
+  background-color: #1a2e5a;
+  color: #ffffff;
+  border: none;
+  padding: clamp(0.5rem, 1.5vh, 0.6rem) clamp(2rem, 6vw, 3.5rem);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.15s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  min-height: 40px;
+  /* Ensure tap target is large enough on mobile */
+  touch-action: manipulation;
+}
+
+.loginBtn:hover:not(:disabled) {
+  background-color: #253f7a;
+  box-shadow: 0 4px 14px rgba(26, 46, 90, 0.35);
+  transform: translateY(-1px);
+}
+
+.loginBtn:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.loginBtn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+
+/* ---------- Loading Spinner ---------- */
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Responsive Breakpoints ---------- */
+
+/*
+  Tablet landscape / small desktop: reduce gap, shrink illustration
+*/
+@media (max-width: 1024px) {
+  .main {
+    gap: clamp(2rem, 5vw, 6rem);
+  }
+}
+
+/*
+  Tablet portrait / large phone landscape: switch to column, hide illustration
+  on very short screens
+*/
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+    gap: clamp(1.5rem, 4vw, 2.5rem);
+    padding: clamp(1.5rem, 4vw, 2rem) clamp(1rem, 5vw, 2rem);
+  }
+
+  .illustrationWrap {
+    width: clamp(140px, 50vw, 280px);
+  }
+
+  .cardWrap {
+    max-width: 100%;
+  }
+}
+
+/* Hide illustration on very short landscape screens (e.g. phone landscape) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .illustrationWrap {
+    display: none;
+  }
+
+  .main {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .cardWrap {
+    max-width: 380px;
+  }
+}
+
+/*
+  Small phones
+*/
+@media (max-width: 380px) {
+  .header {
+    flex-wrap: wrap;
+    padding-block: 0.6rem;
+    height: auto;
+  }
+
+  .portalTitle {
+    font-size: clamp(0.6rem, 4vw, 0.85rem);
+    text-align: center;
+    width: 100%;
+  }
+
+  .card {
+    border-radius: 12px;
+  }
+}

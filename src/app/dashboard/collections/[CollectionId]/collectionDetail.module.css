@@ -1,0 +1,386 @@
+/* ── Page Shell ─────────────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f0f3fb;
+  font-family: "Segoe UI", sans-serif;
+  overflow: auto;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────────── */
+.header {
+  padding: 1.25rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4e6fa3;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.75rem;
+  transition: color 0.14s;
+}
+.backBtn:hover { color: #0d1b3e; }
+
+.headerMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0d1b3e;
+  margin: 0;
+}
+
+.idBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6b7a99;
+  background: #edf0f8;
+  border-radius: 20px;
+  padding: 0.2rem 0.6rem;
+}
+
+.description {
+  margin: 0.5rem 0 0 0;
+  font-size: 0.82rem;
+  color: #6b7a99;
+}
+
+/* ── Meta Grid ──────────────────────────────────────────────────────────────── */
+.metaGrid {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  border-bottom: 1px solid #dde3f0;
+  background: #f7f9ff;
+}
+
+.metaCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: #fff;
+  border: 1px solid #dde3f0;
+  border-radius: 8px;
+  padding: 0.7rem 1.1rem;
+  min-width: 140px;
+}
+
+.metaLabel {
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #9aa3bb;
+}
+
+.metaValue {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0d1b3e;
+}
+
+.metaSub {
+  font-size: 0.75rem;
+  color: #6b7a99;
+}
+
+.urlLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4e8ef7;
+  text-decoration: none;
+  background: #eef4ff;
+  border: 1px solid #c8daff;
+  border-radius: 5px;
+  padding: 0.22rem 0.65rem;
+  margin-top: 0.2rem;
+  transition: background 0.14s, color 0.14s;
+}
+.urlLink:hover { background: #4e8ef7; color: #fff; }
+
+/* ── Tabs ───────────────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.1rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6b7a99;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+  margin-bottom: -1px;
+}
+.tab:hover { color: #0d1b3e; }
+
+.tabActive {
+  color: #0d1b3e;
+  border-bottom-color: #4e8ef7;
+}
+
+.tabCount {
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: #edf0f8;
+  color: #4e6fa3;
+  border-radius: 20px;
+  padding: 0.1rem 0.5rem;
+}
+
+.tabActive .tabCount {
+  background: #dde8f8;
+  color: #1a4a7a;
+}
+
+/* ── Tab Content ────────────────────────────────────────────────────────────── */
+.tabContent {
+  flex: 1;
+  overflow: auto;
+  padding: 1.25rem 2rem;
+}
+
+/* ── Table ──────────────────────────────────────────────────────────────────── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.07);
+}
+
+.table thead tr {
+  background: #0d1b3e;
+  color: #c8d4f0;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.table th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #edf0f8;
+  transition: background 0.12s;
+}
+.table tbody tr:last-child { border-bottom: none; }
+.table tbody tr:hover { background: #f4f7ff; }
+
+.table td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* ── Cell variants ──────────────────────────────────────────────────────────── */
+.idCell   { font-weight: 600; color: #6b7a99; width: 60px; }
+.numCell  { text-align: center; font-weight: 600; }
+.dateCell {
+  color: #6b7a99;
+  white-space: nowrap;
+  font-size: 0.78rem;
+}
+
+.fileCell { display: flex; align-items: center; gap: 0.4rem; }
+
+.fileLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: #4e8ef7;
+  text-decoration: none;
+  font-weight: 500;
+}
+.fileLink:hover { text-decoration: underline; }
+
+.reasonCell {
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #4e6fa3;
+}
+
+.emptyCell {
+  text-align: center;
+  color: #9aa3bb;
+  padding: 2.5rem !important;
+  font-size: 0.85rem;
+}
+
+/* ── Status Badge ───────────────────────────────────────────────────────────── */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 0.22rem 0.7rem;
+  white-space: nowrap;
+}
+
+.statusQueued     { color: #7a5c1a; background: #fef3d4; border: 1px solid #f5dda0; }
+.statusProcessing { color: #1a4a7a; background: #d4e8f8; border: 1px solid #a8ccee; }
+.statusCompleted  { color: #1a7a4a; background: #d4f5e5; border: 1px solid #a8e6c8; }
+.statusFailed     { color: #7a1a1a; background: #f8d4d4; border: 1px solid #eea8a8; }
+.statusPartial    { color: #4a3a7a; background: #e8d4f8; border: 1px solid #cca8ee; }
+
+/* ── State: loading / error ─────────────────────────────────────────────────── */
+.stateWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 100%;
+  min-height: 300px;
+  color: #9aa3bb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(78,142,247,0.15);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorText { color: #c0392b; font-size: 0.88rem; margin: 0; }
+
+/* ── Tab Toolbar ─────────────────────────────────────────────────────────────── */
+.tabToolbar {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tabSearch {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.45rem 0.85rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  border: 1px solid #dde3f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #0d1b3e;
+  outline: none;
+  transition: border-color 0.14s;
+}
+.tabSearch:focus { border-color: #4e8ef7; }
+
+.tabSelect {
+  padding: 0.45rem 0.75rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  border: 1px solid #dde3f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #0d1b3e;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.14s;
+}
+.tabSelect:focus { border-color: #4e8ef7; }
+
+/* ── Date Range Picker ───────────────────────────────────────────────────────── */
+.dateRangeWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.dateRangeLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7a99;
+  white-space: nowrap;
+}
+
+.dateInput {
+  padding: 0.45rem 0.75rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  border: 1px solid #dde3f0;
+  border-radius: 6px;
+  background: #fff;
+  color: #0d1b3e;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.14s;
+}
+.dateInput:focus { border-color: #4e8ef7; }
+
+.clearDateBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7a99;
+  background: #f0f3fb;
+  border: 1px solid #dde3f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+  white-space: nowrap;
+}
+.clearDateBtn:hover { background: #e0e6f5; color: #0d1b3e; }

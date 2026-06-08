@@ -1,0 +1,495 @@
+/* ── Page Shell ─────────────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f0f3fb;
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+/* ── Centered States (loading / error) ──────────────────────────────────────── */
+.centeredState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  height: 100%;
+  color: #9aa3bb;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.88rem;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(78, 142, 247, 0.15);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorText { color: #c0392b; margin: 0; }
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* ── Header bar ─────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem 0.6rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  flex-shrink: 0;
+  background: #f0f3fb;
+}
+
+.backLink {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4e6fa3;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0;
+  transition: color 0.14s;
+}
+
+.backLink:hover { color: #0d1b3e; }
+
+/* ── Profile Card ───────────────────────────────────────────────────────────── */
+.profileCard {
+  background: #fff;
+  border-bottom: 1px solid #dde3f0;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Left: avatar + name/email */
+.profileLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.profileAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3a7e 0%, #2d5be3 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 12px rgba(45, 91, 227, 0.3);
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.profileNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.profileName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0d1b3e;
+  margin: 0;
+}
+
+.statusPill {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 0.15rem 0.55rem;
+}
+
+.pillActive {
+  color: #1a7a4a;
+  background: #d4f5e5;
+  border: 1px solid #a8e6c8;
+}
+
+.pillInactive {
+  color: #7a3a1a;
+  background: #f5e0d4;
+  border: 1px solid #e6c0a8;
+}
+
+.profileUsername {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #4e6fa3;
+  margin: 0;
+}
+
+.profileEmail {
+  font-size: 0.76rem;
+  color: #6b7a99;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ── Divider between sections ───────────────────────────────────────────────── */
+.profileDivider {
+  width: 1px;
+  height: 36px;
+  background: #dde3f0;
+  flex-shrink: 0;
+}
+
+/* ── Meta row (inline, horizontal) ─────────────────────────────────────────── */
+.profileMeta {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.metaItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.metaLabel {
+  font-size: 0.63rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9aa3bb;
+}
+
+.metaValue {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #1a2a50;
+}
+
+/* ── Stats row (pushed to the right) ───────────────────────────────────────── */
+.statsRow {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f0f3fb;
+  border: 1px solid #dde3f0;
+  border-radius: 8px;
+  padding: 0.45rem 0.9rem;
+  min-width: 64px;
+  gap: 0.05rem;
+}
+
+.statNumber {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0d1b3e;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.6rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9aa3bb;
+  white-space: nowrap;
+}
+
+/* ── Tabs ───────────────────────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #dde3f0;
+  background: #f7f9ff;
+  flex-shrink: 0;
+  padding: 0 2rem;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.1rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9aa3bb;
+  cursor: pointer;
+  transition: color 0.14s, border-color 0.14s;
+  white-space: nowrap;
+  margin-bottom: -1px;
+}
+
+.tab:hover { color: #4e6fa3; }
+
+.tabActive {
+  color: #0d1b3e;
+  border-bottom-color: #2d5be3;
+}
+
+.tabCount {
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: #dde8f8;
+  color: #4e6fa3;
+  border-radius: 20px;
+  padding: 0.1rem 0.5rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+.tabActive .tabCount {
+  background: #0d1b3e;
+  color: #c8d4f0;
+}
+
+/* ── Tab Content ────────────────────────────────────────────────────────────── */
+.tabContent {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.5rem 2rem;
+}
+
+/* ── Empty State ────────────────────────────────────────────────────────────── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 240px;
+  color: #9aa3bb;
+  font-size: 0.88rem;
+}
+
+.emptyState i { font-size: 2rem; }
+
+/* ── Table Wrapper ──────────────────────────────────────────────────────────── */
+.tableWrap {
+  overflow-x: auto;
+  margin: 0 -2rem;
+  padding: 0 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  color: #1a2a50;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.07);
+}
+
+.table thead tr {
+  background: #0d1b3e;
+  color: #c8d4f0;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+}
+
+.table th {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #edf0f8;
+  transition: background 0.12s;
+}
+
+.table tbody tr:last-child { border-bottom: none; }
+.table tbody tr:hover { background: #f4f7ff; }
+
+.table td {
+  padding: 0.7rem 1rem;
+  vertical-align: middle;
+}
+
+/* ── Cell helpers ───────────────────────────────────────────────────────────── */
+.idCell {
+  font-weight: 600;
+  color: #6b7a99;
+  white-space: nowrap;
+}
+
+.dateCell {
+  color: #6b7a99;
+  white-space: nowrap;
+  font-size: 0.75rem;
+}
+
+.reasonCell {
+  max-width: 200px;
+  color: #4e6fa3;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nil { color: #cdd5e8; }
+
+.cellName {
+  font-weight: 600;
+  color: #0d1b3e;
+  font-size: 0.8rem;
+}
+
+.cellSub {
+  font-size: 0.72rem;
+  color: #9aa3bb;
+  margin-top: 0.1rem;
+}
+
+/* ── User cell with mini-avatar ─────────────────────────────────────────────── */
+.userCell {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.miniAvatar {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3a7e 0%, #2d5be3 100%);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── Status Badges ──────────────────────────────────────────────────────────── */
+.statusBadge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 0.18rem 0.6rem;
+  white-space: nowrap;
+}
+
+.statusPending {
+  color: #7a5c1a;
+  background: #fef3d4;
+  border: 1px solid #f5dfa8;
+}
+
+.statusAssigned {
+  color: #1a4a7a;
+  background: #d4e8f5;
+  border: 1px solid #a8d0e6;
+}
+
+.statusInReview {
+  color: #4a1a7a;
+  background: #ead4f5;
+  border: 1px solid #cca8e6;
+}
+
+.statusCompleted {
+  color: #1a7a4a;
+  background: #d4f5e5;
+  border: 1px solid #a8e6c8;
+}
+
+.statusRejected {
+  color: #7a1a1a;
+  background: #f5d4d4;
+  border: 1px solid #e6a8a8;
+}
+
+/* ── Tier Badges ────────────────────────────────────────────────────────────── */
+.tierChange {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.tierBadge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+}
+
+.tierBasic {
+  color: #4e6fa3;
+  background: #dde8f8;
+  border: 1px solid #c0d4f0;
+}
+
+.tierPro {
+  color: #4a1a7a;
+  background: #ead4f5;
+  border: 1px solid #cca8e6;
+}
+
+.tierPremium {
+  color: #7a5c1a;
+  background: #fef3d4;
+  border: 1px solid #f5dfa8;
+}

@@ -1,0 +1,76 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #0d1b3e;
+  padding: 0 2rem;
+  height: 90px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 10;
+}
+
+/* ── Logo ───────────────────────────────── */
+.logoWrap {
+  display: flex;
+  align-items: center;
+  width: 160px;
+}
+
+.logo {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  filter: brightness(1.05);
+  cursor: pointer;
+}
+
+/* ── Title ──────────────────────────────── */
+.title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-bebas), "Georgia", serif;
+  font-size: 1.45rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e8edf8;
+  white-space: nowrap;
+  margin: 0;
+  user-select: none;
+}
+
+/* ── Actions ────────────────────────────── */
+.actions {
+  display: flex;
+  align-items: center;
+  width: 160px;
+  justify-content: flex-end;
+}
+
+.logoutBtn {
+  font-family: var(--font-bebas), "Georgia", serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #e8edf8;
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 6px;
+  padding: 0.45rem 1.25rem;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.logoutBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.75);
+  color: #ffffff;
+}
+
+.logoutBtn:active {
+  background: rgba(255, 255, 255, 0.18);
+}

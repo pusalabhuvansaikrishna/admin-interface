@@ -1,0 +1,135 @@
+/* ── Full-page Loading ──────────────────── */
+.loadingWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #0a0f1c;
+  gap: 1rem;
+  color: rgba(220, 228, 248, 0.6);
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Admin Card ─────────────────────────── */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2.5rem 2.25rem;
+  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3a7e 0%, #2d5be3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-family: "Rajdhani", sans-serif;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 4px 16px rgba(78, 142, 247, 0.3);
+}
+
+.welcomeText {
+  font-family: "Rajdhani", "Barlow Condensed", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #6b7a99;
+  margin: 0;
+}
+
+.adminName {
+  font-family: "Rajdhani", "Barlow Condensed", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0d1b3e;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #e9ecf4;
+  margin: 0.75rem 0;
+}
+
+/* ── Info Grid ──────────────────────────── */
+.infoGrid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.infoLabel {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #8a94ad;
+  text-transform: uppercase;
+}
+
+.infoValue {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1a2a50;
+}
+
+/* ── Status Badge ───────────────────────── */
+.badge {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #1a7a4a;
+  background: #d4f5e5;
+  border: 1px solid #a8e6c8;
+  border-radius: 20px;
+  padding: 0.2rem 0.75rem;
+}
+
+/* ── Footer Note ────────────────────────── */
+.note {
+  font-family: "Rajdhani", sans-serif;
+  font-size: 0.8rem;
+  color: #9aa3bb;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}

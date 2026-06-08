@@ -1,0 +1,592 @@
+/* ── Page Shell ─────────────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f0f3fb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Top Bar ────────────────────────────────────────────────────────────────── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem 0.75rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  flex-shrink: 0;
+}
+
+.topBarLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.title {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0d1b3e;
+  margin: 0;
+}
+
+.totalBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4e6fa3;
+  background: #dde8f8;
+  border-radius: 20px;
+  padding: 0.2rem 0.7rem;
+}
+
+/* ── Filters ────────────────────────────────────────────────────────────────── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #f7f9ff;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
+  height: 36px;
+  padding: 0 0.85rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.searchInput:focus { border-color: #4e8ef7; }
+
+.select {
+  height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.select:focus { border-color: #4e8ef7; }
+
+/* ── Table Wrapper ──────────────────────────────────────────────────────────── */
+.tableWrap {
+  flex: 1;
+  overflow: auto;
+  padding: 1.25rem 2rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.07);
+}
+
+.table thead tr {
+  background: #0d1b3e;
+  color: #c8d4f0;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.table th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #edf0f8;
+  transition: background 0.12s;
+}
+
+.table tbody tr:last-child { border-bottom: none; }
+.table tbody tr:hover { background: #f4f7ff; }
+
+.table td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+}
+
+/* ── Clickable row ──────────────────────────────────────────────────────────── */
+.clickableRow {
+  cursor: pointer;
+  transition: background 0.12s, box-shadow 0.12s;
+}
+
+.clickableRow:hover {
+  background: #eef2fd !important;
+}
+
+.clickableRow:hover .chevronCell {
+  color: #4e8ef7;
+  transform: translateX(3px);
+}
+
+/* ── Chevron cell ───────────────────────────────────────────────────────────── */
+.chevronCell {
+  color: #cdd5e8;
+  font-size: 0.8rem;
+  text-align: right;
+  width: 32px;
+  transition: color 0.15s, transform 0.15s;
+}
+
+/* ── Cell variants ──────────────────────────────────────────────────────────── */
+.idCell {
+  font-weight: 600;
+  color: #6b7a99;
+  width: 60px;
+}
+
+/* ── Name with avatar ───────────────────────────────────────────────────────── */
+.nameWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3a7e 0%, #2d5be3 100%);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nameCell {
+  font-weight: 600;
+  color: #0d1b3e;
+}
+
+.usernameCell {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #4e6fa3;
+}
+
+.dateCell {
+  color: #6b7a99;
+  white-space: nowrap;
+}
+
+/* ── Status Badge ───────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 0.2rem 0.65rem;
+}
+
+.badgeActive {
+  color: #1a7a4a;
+  background: #d4f5e5;
+  border: 1px solid #a8e6c8;
+}
+
+.badgeInactive {
+  color: #7a3a1a;
+  background: #f5e0d4;
+  border: 1px solid #e6c0a8;
+}
+
+/* ── State: loading / error / empty ────────────────────────────────────────── */
+.stateWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 300px;
+  color: #9aa3bb;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(78, 142, 247, 0.15);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorText { color: #c0392b; font-size: 0.88rem; margin: 0; }
+
+.retryBtn {
+  padding: 0.4rem 1.2rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.emptyText { font-size: 0.9rem; color: #9aa3bb; margin: 0; }
+
+/* ── Pagination ─────────────────────────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1rem 2rem;
+  border-top: 1px solid #dde3f0;
+  flex-shrink: 0;
+  background: #f7f9ff;
+  flex-wrap: wrap;
+}
+
+.pageBtn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 0.5rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  background: #fff;
+  color: #1a2a50;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.14s, border-color 0.14s, color 0.14s;
+}
+
+.pageBtn:hover:not(:disabled) { background: #e8edf8; border-color: #4e8ef7; }
+.pageBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.pageBtnActive {
+  background: #0d1b3e;
+  color: #fff;
+  border-color: #0d1b3e;
+  font-weight: 700;
+}
+
+.pageBtnActive:hover:not(:disabled) { background: #0d1b3e; }
+
+.ellipsis { color: #9aa3bb; font-size: 0.85rem; padding: 0 0.15rem; }
+.pageInfo { font-size: 0.75rem; color: #6b7a99; margin-left: 0.5rem; }
+
+/* ── New Admin Button ───────────────────────────────────────────────────────── */
+.newBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.1rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s;
+  white-space: nowrap;
+}
+
+.newBtn:hover { background: #1a2f6e; }
+
+/* ── Modal Backdrop ─────────────────────────────────────────────────────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 28, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Modal Box ──────────────────────────────────────────────────────────────── */
+.modal {
+  background: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.18s ease;
+  overflow: hidden;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Modal Header ───────────────────────────────────────────────────────────── */
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 1rem 1.5rem;
+  border-bottom: 1px solid #edf0f8;
+}
+
+.modalTitle {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0d1b3e;
+  margin: 0;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9aa3bb;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 0.2rem;
+  border-radius: 4px;
+  transition: color 0.14s, background 0.14s;
+}
+
+.closeBtn:hover { color: #0d1b3e; background: #f0f3fb; }
+.closeBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ── Modal Body ─────────────────────────────────────────────────────────────── */
+.modalBody {
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Form Fields ────────────────────────────────────────────────────────────── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #6b7a99;
+}
+
+.input {
+  width: 100%;
+  height: 38px;
+  padding: 0 0.85rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.85rem;
+  color: #1a2a50;
+  background: #f7f9ff;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.input:focus { border-color: #4e8ef7; background: #fff; }
+.input:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Input with @ prefix ────────────────────────────────────────────────────── */
+.inputPrefix {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cdd5e8;
+  border-radius: 7px;
+  background: #f7f9ff;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.inputPrefix:focus-within { border-color: #4e8ef7; background: #fff; }
+
+.prefix {
+  padding: 0 0.65rem;
+  color: #9aa3bb;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #edf0f8;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #cdd5e8;
+  flex-shrink: 0;
+}
+
+.inputWithPrefix {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  flex: 1;
+}
+
+.inputWithPrefix:focus { border-color: transparent; background: transparent; }
+
+/* ── Input with eye suffix ──────────────────────────────────────────────────── */
+.inputSuffix {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cdd5e8;
+  border-radius: 7px;
+  background: #f7f9ff;
+  overflow: hidden;
+  transition: border-color 0.15s;
+}
+
+.inputSuffix:focus-within { border-color: #4e8ef7; background: #fff; }
+
+.inputWithSuffix {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  flex: 1;
+}
+
+.inputWithSuffix:focus { border-color: transparent; background: transparent; }
+
+.eyeBtn {
+  background: none;
+  border: none;
+  padding: 0 0.75rem;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #9aa3bb;
+  font-size: 0.95rem;
+  transition: color 0.14s;
+  flex-shrink: 0;
+}
+
+.eyeBtn:hover { color: #4e6fa3; }
+
+/* ── Form Error ─────────────────────────────────────────────────────────────── */
+.formError {
+  font-size: 0.8rem;
+  color: #c0392b;
+  background: #fdf0ee;
+  border: 1px solid #f5c6c0;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ── Success State ──────────────────────────────────────────────────────────── */
+.successWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+}
+
+.successText {
+  font-size: 0.88rem;
+  color: #1a7a4a;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Modal Footer ───────────────────────────────────────────────────────────── */
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 1rem 1.5rem 1.25rem 1.5rem;
+  border-top: 1px solid #edf0f8;
+}
+
+.cancelBtn {
+  padding: 0.5rem 1.1rem;
+  background: #fff;
+  color: #4e6fa3;
+  border: 1px solid #cdd5e8;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.14s;
+}
+
+.cancelBtn:hover:not(:disabled) { background: #f0f3fb; }
+.cancelBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.createBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1.3rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.16s;
+}
+
+.createBtn:hover:not(:disabled) { background: #1a2f6e; }
+.createBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── Button Spinner ─────────────────────────────────────────────────────────── */
+.btnSpinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+  display: inline-block;
+}

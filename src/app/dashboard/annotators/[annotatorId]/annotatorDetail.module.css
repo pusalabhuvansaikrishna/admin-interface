@@ -1,0 +1,741 @@
+/* ── Page Shell ─────────────────────────────────────────────────────────────── */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: #f0f3fb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Loading / Error State ──────────────────────────────────────────────────── */
+.centerState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+  color: #9aa3bb;
+  font-size: 0.88rem;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(78, 142, 247, 0.15);
+  border-top-color: #4e8ef7;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.errorText { color: #c0392b; font-size: 0.88rem; margin: 0; }
+
+.retryBtn {
+  padding: 0.4rem 1.2rem;
+  background: #0d1b3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* ── Top Bar ────────────────────────────────────────────────────────────────── */
+.topBar {
+  padding: 1rem 2rem 0.5rem 2rem;
+  border-bottom: 1px solid #dde3f0;
+  background: #f7f9ff;
+  flex-shrink: 0;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  padding: 0.35rem 0.85rem;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #4e6fa3;
+  cursor: pointer;
+  transition: background 0.14s, color 0.14s;
+}
+.backBtn:hover { background: #e8edf8; color: #0d1b3e; }
+
+/* ── Profile Hero ───────────────────────────────────────────────────────────── */
+.hero {
+  background: #0d1b3e;
+  color: #fff;
+  padding: 1.75rem 2rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.heroLeft {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a3a7e 0%, #2d5be3 100%);
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 3px solid rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.02em;
+}
+
+.heroInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.heroNameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.heroName {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.heroUsername {
+  font-size: 0.82rem;
+  color: #7a90c0;
+  font-family: monospace;
+  margin: 0;
+}
+
+.heroEmail,
+.heroJoined {
+  font-size: 0.8rem;
+  color: #9ab0d8;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ── Status Badges ──────────────────────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 20px;
+  padding: 0.2rem 0.65rem;
+}
+.badgeActive   { color: #1a7a4a; background: #d4f5e5; border: 1px solid #a8e6c8; }
+.badgeInactive { color: #7a3a1a; background: #f5e0d4; border: 1px solid #e6c0a8; }
+
+/* ── Stat Row ───────────────────────────────────────────────────────────────── */
+.statRow {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.statCard {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-width: 80px;
+}
+
+.statValue {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.68rem;
+  color: #8aacda;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* ── Body Layout ────────────────────────────────────────────────────────────── */
+.body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
+  align-items: start;
+  flex: 1;
+}
+
+@media (max-width: 900px) {
+  .body { grid-template-columns: 1fr; }
+}
+
+/* ── Shared Card ────────────────────────────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: #0d1b3e;
+  color: #c8d4f0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cardBadge {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 1px 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* ── Aside ──────────────────────────────────────────────────────────────────── */
+.aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ── Languages in aside card ────────────────────────────────────────────────── */
+.langWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0.85rem 1rem;
+}
+
+.langTag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #e8f0fe;
+  color: #1a56db;
+  font-size: 0.72rem;
+  font-weight: 500;
+  border: 1px solid #c3d3f7;
+  white-space: nowrap;
+}
+
+.emptyHint {
+  font-size: 0.82rem;
+  color: #9aa3bb;
+}
+
+/* ── DL (definition list) ───────────────────────────────────────────────────── */
+.dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  padding: 0.85rem 1rem;
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.dl dt {
+  color: #9aa3bb;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.67rem;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.dl dd {
+  color: #1a2a50;
+  font-weight: 500;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.ddBreak {
+  word-break: break-all;
+}
+
+/* ── Task Breakdown ─────────────────────────────────────────────────────────── */
+.breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+}
+
+.breakdownRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.breakdownLabel {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.breakdownBar {
+  flex: 1;
+  height: 6px;
+  background: #edf0f8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.breakdownVal {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #4e6fa3;
+  width: 24px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Main / Tasks ───────────────────────────────────────────────────────────── */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tasksHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.tasksTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #0d1b3e;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tasksTotalBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #4e6fa3;
+  background: #dde8f8;
+  border-radius: 20px;
+  padding: 0.2rem 0.7rem;
+}
+
+.taskFilters {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.searchWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  background: #fff;
+  padding: 0 0.7rem;
+  height: 36px;
+  font-size: 0.82rem;
+  color: #9aa3bb;
+  transition: border-color 0.15s;
+}
+.searchWrap:focus-within { border-color: #4e8ef7; }
+
+.searchInput {
+  border: none;
+  outline: none;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: transparent;
+  width: 200px;
+}
+.searchInput::placeholder { color: #b0b8cc; }
+
+.searchClear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #b0b8cc;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  transition: color 0.14s;
+}
+.searchClear:hover { color: #4e6fa3; }
+
+.select {
+  height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid #cdd5e8;
+  border-radius: 6px;
+  font-family: "Segoe UI", sans-serif;
+  font-size: 0.82rem;
+  color: #1a2a50;
+  background: #fff;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.select:focus { border-color: #4e8ef7; }
+
+/* ── Empty Tasks ────────────────────────────────────────────────────────────── */
+.emptyTasks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 200px;
+  background: #fff;
+  border-radius: 10px;
+  color: #9aa3bb;
+  font-size: 0.88rem;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Task List ──────────────────────────────────────────────────────────────── */
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* ── Task Card ──────────────────────────────────────────────────────────────── */
+.taskCard {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  border: 1px solid #edf0f8;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+.taskCard:hover { box-shadow: 0 3px 14px rgba(13, 27, 62, 0.1); }
+.taskCardExpanded { border-color: #c3d3f7; box-shadow: 0 3px 14px rgba(13, 27, 62, 0.1); }
+
+.taskCardHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.taskCardLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.taskId {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #9aa3bb;
+  font-family: monospace;
+  flex-shrink: 0;
+  background: #f0f3fb;
+  border-radius: 4px;
+  padding: 2px 7px;
+}
+
+.taskCardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  min-width: 0;
+}
+
+.taskFileName {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #0d1b3e;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.taskRequestor {
+  font-size: 0.74rem;
+  color: #6b7a99;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.taskCardRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+
+.taskDate {
+  font-size: 0.74rem;
+  color: #9aa3bb;
+  white-space: nowrap;
+}
+
+.taskChevron {
+  font-size: 0.78rem;
+  color: #9aa3bb;
+  transition: transform 0.2s;
+}
+
+/* ── Task Detail (expanded) ─────────────────────────────────────────────────── */
+.taskDetail {
+  border-top: 1px solid #edf0f8;
+  background: #f7f9ff;
+  padding: 1rem;
+  animation: expandIn 0.18s ease;
+}
+
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.taskDetailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.detailSection {
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #edf0f8;
+  overflow: hidden;
+}
+
+.detailSectionFull {
+  grid-column: 1 / -1;
+}
+
+.detailSectionTitle {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #4e6fa3;
+  background: #f0f5ff;
+  padding: 0.5rem 0.85rem;
+  margin: 0;
+  border-bottom: 1px solid #edf0f8;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ── Job Progress ───────────────────────────────────────────────────────────── */
+.jobProgress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.jobProgressBar {
+  flex: 1;
+  height: 6px;
+  background: #edf0f8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.jobProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #1a56db, #4e8ef7);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.jobProgressLabel {
+  font-size: 0.72rem;
+  color: #6b7a99;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+/* ── Timeline ───────────────────────────────────────────────────────────────── */
+.timeline {
+  padding: 0.9rem 1rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tlCreated {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.tlHorizRow {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.tlLabelsRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+}
+
+.tlEndpoint {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  max-width: 45%;
+}
+
+.tlEndpointRight {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.tlDotSolid {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #1a56db;
+  border: 2px solid #1a56db;
+  flex-shrink: 0;
+}
+
+.tlDotEmpty {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #cdd5e8;
+  flex-shrink: 0;
+}
+
+.tlHorizLine {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px;
+}
+
+.tlDottedLine {
+  flex: 1;
+  height: 0;
+  border-top: 2px dashed #cdd5e8;
+}
+
+.tlDiffBadge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #1a56db;
+  background: #e8f0fe;
+  border: 1px solid #c3d3f7;
+  border-radius: 20px;
+  padding: 1px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tlLabel {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #6b7a99;
+}
+
+.tlTime {
+  font-size: 0.78rem;
+  color: #1a2a50;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.tlPending {
+  font-size: 0.74rem;
+  color: #b0b8cc;
+  font-style: italic;
+}
+
+/* ── Reason Blocks ──────────────────────────────────────────────────────────── */
+.reasonBlock {
+  padding: 0.65rem 0.85rem;
+  border-top: 1px solid #f0f3fb;
+}
+.reasonBlock:first-child { border-top: none; }
+
+.reasonLabel {
+  font-size: 0.67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9aa3bb;
+}
+
+.reasonText {
+  font-size: 0.82rem;
+  color: #1a2a50;
+  margin: 0.25rem 0 0 0;
+  line-height: 1.5;
+}
