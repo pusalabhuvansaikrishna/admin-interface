@@ -334,6 +334,10 @@ export default function DocumentDetailPage() {
   const [activeTab, setActiveTab] = useState<Tab>("review_tasks");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // ── Reconstructed file download state ────────────────────────────────────
+  const [isDownloading, setIsDownloading]   = useState(false);
+  const [downloadError, setDownloadError]   = useState<string | null>(null);
+
   useEffect(() => {
     if (!documentId) return;
     (async () => {
@@ -369,6 +373,54 @@ export default function DocumentDetailPage() {
     });
   };
 
+  // ── Download the reconstructed PDF from the backend ──────────────────────
+  const handleDownloadReconstructed = async () => {
+    if (!data || isDownloading) return;
+    setIsDownloading(true);
+    setDownloadError(null);
+    try {
+      const res = await fetch(
+        `${BASE_URL}/admin/collection/${data.collection_id}/document/${data.document_id}/download-pdf`,
+        { credentials: "include" }
+      );
+
+      if (!res.ok) {
+        let detail = `Error ${res.status}: ${res.statusText}`;
+        try {
+          const body = await res.json();
+          if (body?.detail) detail = body.detail;
+        } catch {
+          // response wasn't JSON, keep the default message
+        }
+        throw new Error(detail);
+      }
+
+      const blob = await res.blob();
+
+      // Prefer the filename the server set via Content-Disposition,
+      // fall back to a sensible default derived from the document name.
+      const disposition = res.headers.get("Content-Disposition");
+      let filename = `${data.file_name.replace(/\.[^/.]+$/, "")}_reconstructed.pdf`;
+      if (disposition) {
+        const match = disposition.match(/filename="?([^"]+)"?/);
+        if (match?.[1]) filename = match[1];
+      }
+
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e: any) {
+      setDownloadError(e.message ?? "Failed to download reconstructed file.");
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   if (loading) return (
     <div className={styles.stateWrap}>
       <span className={styles.spinner} />
@@ -400,6 +452,8 @@ export default function DocumentDetailPage() {
     dateTo: sf.dateTo, onDateTo: sf.setDateTo,
     onClearDates: sf.clearDates,
   });
+
+  const canDownloadReconstructed = data.status === "Completed" && !!data.ocr_url;
 
   return (
     <div className={styles.page}>
@@ -437,8 +491,34 @@ export default function DocumentDetailPage() {
                     <i className="bi bi-file-earmark-text" /> View OCR
                   </a>
                 )}
+                <button
+                  className={`${styles.actionBtn} ${styles.actionBtnSecondary}`}
+                  onClick={handleDownloadReconstructed}
+                  disabled={isDownloading || !canDownloadReconstructed}
+                  title={
+                    !canDownloadReconstructed
+                      ? "Available once OCR is completed"
+                      : undefined
+                  }
+                >
+                  {isDownloading ? (
+                    <>
+                      <span className={styles.spinner} style={{ width: 14, height: 14 }} />
+                      Downloading...
+                    </>
+                  ) : (
+                    <>
+                      <i className="bi bi-file-earmark-arrow-down" /> Download Reconstructed File
+                    </>
+                  )}
+                </button>
               </div>
             </div>
+            {downloadError && (
+              <p className={styles.errorText} style={{ marginTop: 4 }}>
+                {downloadError}
+              </p>
+            )}
           </div>
 
           {/* ── Meta Grid ─────────────────────────────────────────────────── */}
@@ -466,7 +546,6 @@ export default function DocumentDetailPage() {
                   <span className={styles.metaLabel}>OCR Version</span>
                   <span className={styles.metaValue}>{data.ocr_version ?? "—"}</span>
                 </div>
-                {/* ✅ Fixed: was className={styles.metaLabel"} — missing opening brace */}
                 <div className={styles.metaCard}>
                   <span className={styles.metaLabel}>Created</span>
                   <span className={styles.metaValue}>{fmt(data.created_at)}</span>
