@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import Konva from "konva";
 import { BASE_URL } from "@/config/api";
+import { SPELLCHECK_URL } from "@/config/api";
 import styles from "./editDocumentModal.module.css";
 
 // ── Types ──────────────────────────────────────────────────────────────────────
@@ -53,6 +54,14 @@ interface SuggestionState {
   caretPos: number;
 }
 
+// ── Context menu state (Add to Dictionary) ─────────────────────────────────────
+
+interface ContextMenuState {
+  x: number;
+  y: number;
+  word: string;
+}
+
 // ── Constants ──────────────────────────────────────────────────────────────────
 
 type Tool  = "select" | "create";
@@ -67,8 +76,25 @@ const COLORS = {
   creatingStroke: "#f97316",
 };
 
-// Spell-check removed
-type SpellStatus = "skip";
+// ── Spell-check ────────────────────────────────────────────────────────────────
+
+type SpellStatus = "unknown" | "correct" | "wrong" | "skip";
+
+const DOT_WRONG_COLOR  = "#ef4444";
+const DOT_STROKE_COLOR = "#0a0a14";
+const DOT_R            = 5;
+
+interface SpellCheckResponse {
+  word: string;
+  language: string;
+  locale: string;
+  is_correct: boolean;
+  suggestions: string[];
+}
+
+// Module-level cache so repeated words aren't re-checked across pages/mounts.
+const spellCache = new Map<string, SpellStatus>();
+function cacheKey(word: string, lang: string) { return `${lang}::${word}`; }
 
 // ── Google Input Tools IME map ─────────────────────────────────────────────────
 const LANG_IME_MAP: Record<string, string> = {
@@ -128,6 +154,27 @@ async function fetchSuggestions(rawWord: string, imeCode: string): Promise<strin
   } catch {
     return [];
   }
+}
+
+// ── Dot helpers ─────────────────────────────────────────────────────────────────
+
+function makeDot(rect: Konva.Rect): Konva.Circle {
+  return new Konva.Circle({
+    x: rect.x() + rect.width() - DOT_R - 2,
+    y: rect.y() + DOT_R + 2,
+    radius: DOT_R,
+    fill: DOT_WRONG_COLOR,
+    stroke: DOT_STROKE_COLOR,
+    strokeWidth: 1,
+    name: "spell-dot",
+    listening: false,
+    visible: false,
+  });
+}
+
+function repositionDot(dot: Konva.Circle, rect: Konva.Rect) {
+  dot.x(rect.x() + rect.width() - DOT_R - 2);
+  dot.y(rect.y() + DOT_R + 2);
 }
 
 // ── PDF.js loader ──────────────────────────────────────────────────────────────
@@ -206,6 +253,10 @@ export function EditDocumentModal({
   const resolvedLang   = language ?? "";
   const isActuallyPdf  = imageUrl.toLowerCase().includes(".pdf");
 
+  // ── Spell-check endpoints (decoupled service) ──
+  const spellCheckUrl = `${SPELLCHECK_URL}/spellcheck`;
+  const addWordUrl    = `${SPELLCHECK_URL}/spellcheck/word`;
+
   const wrapperRef   = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const stageRef     = useRef<Konva.Stage | null>(null);
@@ -235,15 +286,34 @@ export function EditDocumentModal({
   const MAX_ZOOM        = 4;
   const ZOOM_STEP       = 0.25;
 
-  // spell-check removed
+  // ── Spell-check state ──────────────────────────────────────────────────────
   const dotMapRef = useRef<Map<string, { dot: Konva.Circle; status: SpellStatus }>>(new Map());
+
+  const [showWrongDots, setShowWrongDots] = useState(true);
+  const showWrongDotsRef = useRef(true);
+  useEffect(() => { showWrongDotsRef.current = showWrongDots; }, [showWrongDots]);
+
+  const [wrongCount,         setWrongCount]         = useState(0);
+  const [tooltipSpellStatus, setTooltipSpellStatus] = useState<SpellStatus>("skip");
   const spellDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Context menu state (Add to Dictionary) ─────────────────────────────────
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
+  const [addingWord,  setAddingWord]  = useState(false);
 
   // ── Tooltip / suggestion ───────────────────────────────────────────────────
   const [tooltip,         setTooltip]         = useState<TooltipState | null>(null);
   const [translitEnabled, setTranslitEnabled] = useState(true);
   const [suggestions,     setSuggestions]     = useState<SuggestionState | null>(null);
   const tooltipInputRef                        = useRef<HTMLTextAreaElement>(null);
+
+  // ── Tooltip manual drag offset ──────────────────────────────────────────────
+  // Lets the annotator grab the tooltip's header and drag it anywhere on
+  // screen, in case the auto-computed position still overlaps the word.
+  const [tooltipOffset, setTooltipOffset] = useState({ x: 0, y: 0 });
+  const isDraggingTooltipRef = useRef(false);
+  const tooltipDragStartRef  = useRef({ mouseX: 0, mouseY: 0, offsetX: 0, offsetY: 0 });
+
   const rawWordRef  = useRef("");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -255,6 +325,8 @@ export function EditDocumentModal({
   const visibleLevRef  = useRef<Set<Level>>(new Set<Level>(["word"]));
   const tooltipRef     = useRef<TooltipState | null>(null);
   const languageRef    = useRef(resolvedLang);
+  const spellUrlRef    = useRef(spellCheckUrl);
+  const addWordUrlRef  = useRef(addWordUrl);
   const renderedPixelWRef = useRef(0);
   const renderedPixelHRef = useRef(0);
 
@@ -269,6 +341,8 @@ export function EditDocumentModal({
   useEffect(() => { visibleLevRef.current = visibleLevels;   }, [visibleLevels]);
   useEffect(() => { tooltipRef.current    = tooltip;         }, [tooltip]);
   useEffect(() => { languageRef.current   = resolvedLang;    }, [resolvedLang]);
+  useEffect(() => { spellUrlRef.current   = spellCheckUrl;   }, [spellCheckUrl]);
+  useEffect(() => { addWordUrlRef.current = addWordUrl;      }, [addWordUrl]);
 
   // ── Reset canvas when modal opens/closes ───────────────────────────────────
   useEffect(() => {
@@ -286,9 +360,13 @@ export function EditDocumentModal({
       setZoom(1);
       zoomRef.current = 1;
       dotMapRef.current.clear();
+      setWrongCount(0);
       setTooltip(null);
+      setTooltipSpellStatus("skip");
+      setTooltipOffset({ x: 0, y: 0 });
       setSuggestions(null);
       setSelectedId(null);
+      setContextMenu(null);
     }
   }, [isOpen]);
 
@@ -321,6 +399,136 @@ export function EditDocumentModal({
     );
   }, [applyZoom]);
 
+  // ── Spell API ──────────────────────────────────────────────────────────────
+  const callSpellApi = useCallback(async (word: string): Promise<SpellStatus> => {
+    const lang = languageRef.current;
+    const url  = spellUrlRef.current;
+    if (!word.trim() || !lang || !url) return "skip";
+    const clean = word.trim().replace(/^[^\p{L}]+|[^\p{L}]+$/gu, "");
+    if (!clean || /^\d+$/.test(clean)) return "skip";
+    const key = cacheKey(clean, lang);
+    if (spellCache.has(key)) return spellCache.get(key)!;
+    try {
+      const params = new URLSearchParams({ word: clean, language: lang });
+      const res    = await fetch(`${url}?${params.toString()}`, {
+        method: "GET", credentials: "include",
+        headers: { "Accept": "application/json" },
+      });
+      if (!res.ok) return "skip";
+      const data: SpellCheckResponse = await res.json();
+      const status: SpellStatus      = data.is_correct ? "correct" : "wrong";
+      spellCache.set(key, status);
+      return status;
+    } catch { return "skip"; }
+  }, []);
+
+  const refreshWrongCount = useCallback(() => {
+    let n = 0;
+    dotMapRef.current.forEach(({ status }) => { if (status === "wrong") n++; });
+    setWrongCount(n);
+  }, []);
+
+  const upsertDot = useCallback((wordId: string, rect: Konva.Rect, status: SpellStatus) => {
+    const layer = layerRef.current;
+    if (!layer) return;
+    const existing = dotMapRef.current.get(wordId);
+    if (status !== "wrong") {
+      if (existing) { existing.status = status; existing.dot.visible(false); layer.batchDraw(); }
+      refreshWrongCount();
+      return;
+    }
+    const shouldBeVisible = showWrongDotsRef.current && visibleLevRef.current.has("word");
+    if (existing) {
+      existing.status = "wrong";
+      repositionDot(existing.dot, rect);
+      existing.dot.visible(shouldBeVisible);
+    } else {
+      const dot = makeDot(rect);
+      dot.visible(shouldBeVisible);
+      layer.add(dot);
+      dotMapRef.current.set(wordId, { dot, status: "wrong" });
+    }
+    layer.batchDraw();
+    refreshWrongCount();
+  }, [refreshWrongCount]);
+
+  const checkWordRect = useCallback(async (wordId: string, text: string, rect: Konva.Rect) => {
+    const status = await callSpellApi(text);
+    upsertDot(wordId, rect, status);
+  }, [callSpellApi, upsertDot]);
+
+  const checkAllWordsOnLayer = useCallback((ocr: OcrData, pageKey: string, layer: Konva.Layer) => {
+    const lines = ocr[pageKey]?.layout_lines ?? [];
+    for (const line of lines) {
+      for (const word of line.words) {
+        const rect = layer.findOne<Konva.Rect>(`#${word.id}`);
+        if (rect) checkWordRect(word.id, word.text, rect);
+      }
+    }
+  }, [checkWordRect]);
+
+  const addWordToDictionary = useCallback(async (word: string) => {
+    const lang = languageRef.current;
+    const url  = addWordUrlRef.current;
+    if (!word.trim() || !lang || !url) return;
+    const clean = word.trim().replace(/^[^\p{L}]+|[^\p{L}]+$/gu, "");
+    if (!clean) return;
+    setAddingWord(true);
+    try {
+      const params = new URLSearchParams({ word: clean, language: lang });
+      const res = await fetch(`${url}?${params}`, {
+        method: "POST", credentials: "include",
+        headers: { "Accept": "application/json" },
+      });
+      if (!res.ok && res.status !== 409) return;
+      spellCache.delete(cacheKey(clean, lang));
+      const layer = layerRef.current;
+      const tid   = tooltipRef.current?.id;
+      if (tid?.startsWith("word") && layer) {
+        const rect = layer.findOne<Konva.Rect>(`#${tid}`);
+        if (rect) { upsertDot(tid, rect, "correct"); setTooltipSpellStatus("correct"); }
+      }
+      const ocr = localOcrRef.current;
+      if (ocr && layer) {
+        const pageKey = String(currentPageRef.current);
+        const lines   = ocr[pageKey]?.layout_lines ?? [];
+        for (const line of lines) {
+          for (const w of line.words) {
+            if (w.id === tid) continue;
+            const wordClean = w.text.trim().replace(/^[^\p{L}]+|[^\p{L}]+$/gu, "");
+            if (wordClean === clean) {
+              const rect = layer.findOne<Konva.Rect>(`#${w.id}`);
+              if (rect) upsertDot(w.id, rect, "correct");
+            }
+          }
+        }
+      }
+    } catch { /* fail silently */ }
+    finally { setAddingWord(false); }
+  }, [upsertDot]);
+
+  // ── Close context menu on outside click / Escape ───────────────────────────
+  useEffect(() => {
+    if (!contextMenu) return;
+    const close = (e: MouseEvent | KeyboardEvent) => {
+      if (e instanceof KeyboardEvent && e.key !== "Escape") return;
+      setContextMenu(null);
+    };
+    window.addEventListener("mousedown", close);
+    window.addEventListener("keydown",   close);
+    return () => {
+      window.removeEventListener("mousedown", close);
+      window.removeEventListener("keydown",   close);
+    };
+  }, [contextMenu]);
+
+  // ── Toggle dot visibility when "Misspelled" is switched off/on ─────────────
+  useEffect(() => {
+    dotMapRef.current.forEach(({ dot, status }) => {
+      dot.visible(status === "wrong" && showWrongDots && visibleLevRef.current.has("word"));
+    });
+    layerRef.current?.batchDraw();
+  }, [showWrongDots]);
 
   // ── Accept transliteration suggestion ─────────────────────────────────────
   const acceptSuggestion = useCallback((suggested: string, sugg: SuggestionState) => {
@@ -341,6 +549,37 @@ export function EditDocumentModal({
     rawWordRef.current = "";
     setSuggestions(null);
     ta.focus();
+  }, []);
+
+  // ── Tooltip dragging (grab the header, move it anywhere) ──────────────────
+  const handleTooltipDragStart = useCallback((e: React.MouseEvent) => {
+    // Don't start a drag when the mousedown originated on a button inside
+    // the header (close button, IME toggle, etc.) — let those handle clicks.
+    if ((e.target as HTMLElement).closest("button")) return;
+    e.stopPropagation();
+    e.preventDefault();
+    isDraggingTooltipRef.current = true;
+    tooltipDragStartRef.current = {
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      offsetX: tooltipOffset.x,
+      offsetY: tooltipOffset.y,
+    };
+  }, [tooltipOffset]);
+
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      if (!isDraggingTooltipRef.current) return;
+      const { mouseX, mouseY, offsetX, offsetY } = tooltipDragStartRef.current;
+      setTooltipOffset({ x: offsetX + (e.clientX - mouseX), y: offsetY + (e.clientY - mouseY) });
+    };
+    const handleUp = () => { isDraggingTooltipRef.current = false; };
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("mouseup",   handleUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("mouseup",   handleUp);
+    };
   }, []);
 
   // ── Transliteration keyboard logic ────────────────────────────────────────
@@ -447,6 +686,9 @@ export function EditDocumentModal({
     const z       = zoomRef.current;
     const bboxW   = rect.width()  * z;
     const bboxH   = rect.height() * z;
+
+    setTooltipOffset({ x: 0, y: 0 }); // fresh box → start from the auto-computed position
+
     setTooltip({
       id, text,
       rectLeft:   container.offsetLeft + absPos.x,
@@ -454,15 +696,25 @@ export function EditDocumentModal({
       rectBottom: container.offsetTop  + absPos.y + bboxH,
       rectW:      bboxW,
     });
+
+    if (id.startsWith("word")) {
+      setTooltipSpellStatus(dotMapRef.current.get(id)?.status ?? "unknown");
+    } else {
+      setTooltipSpellStatus("skip");
+    }
+
     requestAnimationFrame(() => tooltipInputRef.current?.focus());
   }, []);
 
   const closeTooltip = useCallback(() => {
     rawWordRef.current = "";
     setSuggestions(null);
+    setContextMenu(null);
     if (debounceRef.current)      clearTimeout(debounceRef.current);
     if (spellDebounceRef.current) clearTimeout(spellDebounceRef.current);
     setTooltip(null);
+    setTooltipSpellStatus("skip");
+    setTooltipOffset({ x: 0, y: 0 });
   }, []);
 
   const select = useCallback((id: string | null) => {
@@ -490,6 +742,9 @@ export function EditDocumentModal({
     if (!layer) return;
     layer.find(".line").forEach((n) => n.visible(visibleLevels.has("line")));
     layer.find(".word").forEach((n) => n.visible(visibleLevels.has("word")));
+    dotMapRef.current.forEach(({ dot, status }) => {
+      dot.visible(status === "wrong" && showWrongDotsRef.current && visibleLevels.has("word"));
+    });
     layer.draw();
   }, [visibleLevels]);
 
@@ -517,7 +772,24 @@ export function EditDocumentModal({
         if (word) { word.text = text; syncLineText(l); break; }
       }
     }
-  }, []);
+
+    if (id.startsWith("word")) {
+      setTooltipSpellStatus("unknown");
+      if (spellDebounceRef.current) clearTimeout(spellDebounceRef.current);
+      spellDebounceRef.current = setTimeout(async () => {
+        const layer = layerRef.current;
+        if (!layer) return;
+        const rect = layer.findOne<Konva.Rect>(`#${id}`);
+        if (!rect) return;
+        const lang = languageRef.current;
+        const clean = text.trim().replace(/^[^\p{L}]+|[^\p{L}]+$/gu, "");
+        spellCache.delete(cacheKey(clean, lang));
+        const status = await callSpellApi(text);
+        upsertDot(id, rect, status);
+        setTooltipSpellStatus(status);
+      }, 600);
+    }
+  }, [callSpellApi, upsertDot]);
 
   // ── Fetch OCR ──────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -576,6 +848,10 @@ export function EditDocumentModal({
       }
       return next;
     });
+    if (level === "word") {
+      const entry = dotMapRef.current.get(rid);
+      if (entry) repositionDot(entry.dot, rect);
+    }
     openTooltip(rect);
     select(rid);
     layerRef.current?.draw();
@@ -591,6 +867,11 @@ export function EditDocumentModal({
     const pageKey = String(currentPageRef.current);
     trRef.current.nodes([]);
     node.destroy();
+    if (isWord) {
+      const entry = dotMapRef.current.get(selectedId);
+      if (entry) { entry.dot.destroy(); dotMapRef.current.delete(selectedId); }
+      refreshWrongCount();
+    }
     layer.draw();
     select(null);
     closeTooltip();
@@ -608,7 +889,7 @@ export function EditDocumentModal({
       }
       return next;
     });
-  }, [selectedId, updateOcr, select, closeTooltip]);
+  }, [selectedId, updateOcr, select, closeTooltip, refreshWrongCount]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -691,6 +972,13 @@ export function EditDocumentModal({
     rect.destroy();
     layerRef.current.add(cleanRect);
     attachHandlers(cleanRect);
+
+    if (level === "word") {
+      const dot = makeDot(cleanRect);
+      dot.visible(false);
+      layerRef.current.add(dot);
+      dotMapRef.current.set(newId, { dot, status: "skip" });
+    }
 
     if (trRef.current) { trRef.current.nodes([cleanRect]); trRef.current.getLayer()?.draw(); }
     layerRef.current.draw();
@@ -820,11 +1108,16 @@ export function EditDocumentModal({
           const wr = makeRect(word.id, "word", word.bbox);
           attachHandlers(wr);
           layer.add(wr);
+          const dot = makeDot(wr);
+          dot.visible(false);
+          layer.add(dot);
+          dotMapRef.current.set(word.id, { dot, status: "unknown" });
         });
       });
     }
 
     layer.draw();
+    checkAllWordsOnLayer(ocr, pageKey, layer);
 
     stage.on("mousedown touchstart", (e) => {
       if (e.evt instanceof MouseEvent && e.evt.button !== 0) return;
@@ -886,7 +1179,7 @@ export function EditDocumentModal({
     });
   }, [
     startDrawing, updateDrawing, finishDrawing,
-    attachHandlers, select, closeTooltip,
+    attachHandlers, select, closeTooltip, checkAllWordsOnLayer,
   ]);
 
   // ── Build for current page ─────────────────────────────────────────────────
@@ -947,6 +1240,7 @@ export function EditDocumentModal({
     setCurrentPage(page);
     currentPageRef.current = page;
     dotMapRef.current.clear();
+    setWrongCount(0);
     zoomRef.current = 1;
     setZoom(1);
     stageRef.current?.destroy();
@@ -966,6 +1260,7 @@ export function EditDocumentModal({
     stageRef.current?.destroy();
     canvasMountedRef.current = false;
     dotMapRef.current.clear();
+    setWrongCount(0);
     zoomRef.current = 1;
     setZoom(1);
     if (containerRef.current) {
@@ -1026,9 +1321,13 @@ export function EditDocumentModal({
     const placeAbove = spaceBelow < tooltipH + GAP && spaceAbove > spaceBelow;
     const top  = placeAbove ? tooltip.rectTop - tooltipH - GAP : tooltip.rectBottom + GAP;
     const left = Math.max(8, Math.min(tooltip.rectLeft, wrapperW - tooltipW - 8));
+    // Manual drag always wins — once the annotator has moved it, respect that.
+    const finalTop  = top  + tooltipOffset.y;
+    const finalLeft = left + tooltipOffset.x;
+    const wasDragged = tooltipOffset.x !== 0 || tooltipOffset.y !== 0;
     return {
-      tooltipStyle: { top: `${top}px`, left: `${left}px`, width: `${tooltipW}px` } as React.CSSProperties,
-      tooltipAbove: placeAbove,
+      tooltipStyle: { top: `${finalTop}px`, left: `${finalLeft}px`, width: `${tooltipW}px` } as React.CSSProperties,
+      tooltipAbove: placeAbove && !wasDragged,
     };
   })();
 
@@ -1038,7 +1337,7 @@ export function EditDocumentModal({
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className={styles.modalOverlay} onClick={onClose}>
+    <div className={styles.modalOverlay}>
       <div
         className={styles.modalContainer}
         onClick={(e) => e.stopPropagation()}
@@ -1121,6 +1420,38 @@ export function EditDocumentModal({
           </div>
 
           <div style={{ width: 1, height: 22, background: "rgba(0,0,0,0.12)", flexShrink: 0, alignSelf: "center" }} />
+
+          {/* Spell-check */}
+          <div style={{ display: "flex", alignItems: "center", gap: 5, flexShrink: 0 }}>
+            <button
+              onClick={() => setShowWrongDots((v) => !v)}
+              title={showWrongDots ? "Hide misspelled dots" : "Show misspelled dots"}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 5,
+                padding: "5px 11px", borderRadius: 7, cursor: "pointer",
+                border: `1px solid ${showWrongDots ? "#ef444499" : "rgba(0,0,0,0.15)"}`,
+                background: showWrongDots ? "#ef444415" : "transparent",
+                color:      showWrongDots ? "#ef4444"   : "rgba(0,0,0,0.4)",
+                fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0,
+              }}
+            >
+              <span style={{
+                width: 8, height: 8, borderRadius: "50%", flexShrink: 0, display: "inline-block",
+                background: showWrongDots ? "#ef4444" : "rgba(0,0,0,0.2)",
+              }} />
+              Misspelled
+            </button>
+            <span style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              minWidth: 22, height: 22, borderRadius: 11, padding: "0 6px",
+              fontSize: 11, fontWeight: 700, fontFamily: "monospace", flexShrink: 0,
+              background: wrongCount > 0 ? "#ef444420" : "rgba(0,0,0,0.06)",
+              color:      wrongCount > 0 ? "#ef4444"   : "rgba(0,0,0,0.3)",
+              border: `1px solid ${wrongCount > 0 ? "#ef444440" : "rgba(0,0,0,0.1)"}`,
+            }}>
+              {wrongCount}
+            </span>
+          </div>
 
           <div style={{ width: 1, height: 22, background: "rgba(0,0,0,0.12)", flexShrink: 0, alignSelf: "center" }} />
 
@@ -1257,11 +1588,16 @@ export function EditDocumentModal({
                 background: "#1e1e2e", border: "1px solid rgba(255,255,255,0.12)",
                 borderRadius: 8, boxShadow: "0 8px 32px rgba(0,0,0,0.45)", overflow: "hidden",
               }}>
-                {/* Tooltip header */}
-                <div style={{
-                  display: "flex", alignItems: "center", padding: "6px 10px",
-                  background: "rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.08)", gap: 8,
-                }}>
+                {/* Tooltip header — drag handle: grab anywhere here (except buttons) to move the tooltip */}
+                <div
+                  onMouseDown={handleTooltipDragStart}
+                  title="Drag to move"
+                  style={{
+                    display: "flex", alignItems: "center", padding: "6px 10px",
+                    background: "rgba(255,255,255,0.05)", borderBottom: "1px solid rgba(255,255,255,0.08)", gap: 8,
+                    cursor: "grab", userSelect: "none",
+                  }}>
+                  <i className="bi bi-grip-vertical" style={{ fontSize: 12, color: "rgba(255,255,255,0.25)", flexShrink: 0 }} />
                   <span style={{
                     fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.5)",
                     letterSpacing: "0.06em", textTransform: "uppercase",
@@ -1269,6 +1605,28 @@ export function EditDocumentModal({
                   }}>
                     {tooltip.id.startsWith("line") ? "Line" : "Word"} text
                   </span>
+
+                  {tooltip.id.startsWith("word") && tooltipSpellStatus !== "skip" && (
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", gap: 4,
+                      fontSize: 10, fontWeight: 600, fontFamily: "monospace",
+                      padding: "2px 7px", borderRadius: 4, flexShrink: 0,
+                      color:
+                        tooltipSpellStatus === "wrong"   ? "#ef4444" :
+                        tooltipSpellStatus === "correct" ? "#22c55e" : "rgba(255,255,255,0.3)",
+                      background:
+                        tooltipSpellStatus === "wrong"   ? "#ef444418" :
+                        tooltipSpellStatus === "correct" ? "#22c55e18" : "rgba(255,255,255,0.05)",
+                      border: `1px solid ${
+                        tooltipSpellStatus === "wrong"   ? "#ef444450" :
+                        tooltipSpellStatus === "correct" ? "#22c55e50" : "rgba(255,255,255,0.1)"
+                      }`,
+                    }}>
+                      {tooltipSpellStatus === "wrong"   && <><span style={{ width: 6, height: 6, borderRadius: "50%", background: "#ef4444", display: "inline-block" }} /> Misspelled</>}
+                      {tooltipSpellStatus === "correct" && <><span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} /> Correct</>}
+                      {tooltipSpellStatus === "unknown" && <>Checking…</>}
+                    </span>
+                  )}
 
                   {activeIme && (
                     <button
@@ -1289,7 +1647,7 @@ export function EditDocumentModal({
                     </button>
                   )}
 
-                  <button onClick={closeTooltip} style={{
+                  <button onClick={closeTooltip} onMouseDown={(e) => e.stopPropagation()} style={{
                     background: "none", border: "none", cursor: "pointer",
                     color: "rgba(255,255,255,0.4)", fontSize: 14, lineHeight: 1,
                     padding: "0 2px", flexShrink: 0, marginLeft: "auto",
@@ -1324,17 +1682,34 @@ export function EditDocumentModal({
                     style={{
                       width: "100%", resize: "none", outline: "none", boxSizing: "border-box",
                       background: "rgba(255,255,255,0.06)",
-                      border: "1px solid rgba(255,255,255,0.12)",
+                      border: `1px solid ${
+                        tooltipSpellStatus === "wrong"   ? "rgba(239,68,68,0.5)"  :
+                        tooltipSpellStatus === "correct" ? "rgba(34,197,94,0.4)"  : "rgba(255,255,255,0.12)"
+                      }`,
                       borderRadius: 6, color: "#e8e8f0",
                       fontSize: 14, fontFamily: "sans-serif",
-                      padding: "6px 8px", lineHeight: 1.6,
+                      padding: "6px 8px", lineHeight: 1.6, transition: "border-color 0.2s",
                     }}
                     onFocus={(e) => { (e.target as HTMLTextAreaElement).style.borderColor = "rgba(139,92,246,0.6)"; }}
-                    onBlur={(e) => { (e.target as HTMLTextAreaElement).style.borderColor = "rgba(255,255,255,0.12)"; }}
+                    onBlur={(e) => {
+                      (e.target as HTMLTextAreaElement).style.borderColor =
+                        tooltipSpellStatus === "wrong"   ? "rgba(239,68,68,0.5)"  :
+                        tooltipSpellStatus === "correct" ? "rgba(34,197,94,0.4)"  : "rgba(255,255,255,0.12)";
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Escape") { e.preventDefault(); closeTooltip(); }
                       if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) { e.preventDefault(); closeTooltip(); }
                       e.stopPropagation();
+                    }}
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      const ta       = tooltipInputRef.current;
+                      const selected = ta
+                        ? ta.value.slice(ta.selectionStart ?? 0, ta.selectionEnd ?? 0).trim()
+                        : "";
+                      const word = selected || tooltip.text.trim();
+                      if (!word) return;
+                      setContextMenu({ x: e.clientX, y: e.clientY, word });
                     }}
                   />
 
@@ -1377,6 +1752,28 @@ export function EditDocumentModal({
                       <span style={{ fontSize: 10, color: "rgba(139,92,246,0.7)" }}>
                         {tooltip.text.length} chars
                       </span>
+
+                      {/* Recenter — only shown once the tooltip has been dragged away
+                          from its auto-computed spot. Placed right next to Confirm so
+                          it's easy to find and use while editing. */}
+                      {(tooltipOffset.x !== 0 || tooltipOffset.y !== 0) && (
+                        <button
+                          onClick={() => setTooltipOffset({ x: 0, y: 0 })}
+                          onMouseDown={(e) => e.stopPropagation()}
+                          title="Snap back to word"
+                          style={{
+                            display: "inline-flex", alignItems: "center", gap: 4,
+                            background: "rgba(139,92,246,0.14)", border: "1px solid rgba(139,92,246,0.35)",
+                            borderRadius: 6, color: "#c4b5fd", cursor: "pointer",
+                            fontSize: 10, fontWeight: 600, fontFamily: "monospace",
+                            padding: "4px 8px", lineHeight: 1, flexShrink: 0,
+                          }}
+                        >
+                          <i className="bi bi-crosshair" style={{ fontSize: 11 }} />
+                          Recenter
+                        </button>
+                      )}
+
                       <button
                         title="Confirm (Ctrl+Enter)"
                         onClick={closeTooltip}
@@ -1393,19 +1790,73 @@ export function EditDocumentModal({
                 </div>
               </div>
 
-              {tooltipAbove ? (
-                <div style={{
-                  position: "absolute", bottom: -6, left: 14, width: 0, height: 0,
-                  borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
-                  borderTop: "6px solid #1e1e2e", pointerEvents: "none",
-                }} />
-              ) : (
-                <div style={{
-                  position: "absolute", top: -6, left: 14, width: 0, height: 0,
-                  borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
-                  borderBottom: "6px solid #1e1e2e", pointerEvents: "none",
-                }} />
+              {tooltipOffset.x === 0 && tooltipOffset.y === 0 && (
+                tooltipAbove ? (
+                  <div style={{
+                    position: "absolute", bottom: -6, left: 14, width: 0, height: 0,
+                    borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
+                    borderTop: "6px solid #1e1e2e", pointerEvents: "none",
+                  }} />
+                ) : (
+                  <div style={{
+                    position: "absolute", top: -6, left: 14, width: 0, height: 0,
+                    borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
+                    borderBottom: "6px solid #1e1e2e", pointerEvents: "none",
+                  }} />
+                )
               )}
+            </div>
+          )}
+
+          {/* ── Context menu (Add to Dictionary) ── */}
+          {contextMenu && (
+            <div
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                position: "fixed", top: contextMenu.y, left: contextMenu.x,
+                zIndex: 99999, background: "#1e1e2e",
+                border: "1px solid rgba(255,255,255,0.12)", borderRadius: 8,
+                boxShadow: "0 8px 28px rgba(0,0,0,0.55)", overflow: "hidden", minWidth: 210,
+              }}
+            >
+              <div style={{
+                padding: "5px 12px", fontSize: 10, fontFamily: "monospace",
+                fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase",
+                color: "rgba(255,255,255,0.3)", borderBottom: "1px solid rgba(255,255,255,0.08)",
+                background: "rgba(255,255,255,0.03)", whiteSpace: "nowrap",
+                overflow: "hidden", textOverflow: "ellipsis", maxWidth: 210,
+              }}>
+                "{contextMenu.word}"
+              </div>
+              <button
+                disabled={addingWord}
+                onClick={async () => { await addWordToDictionary(contextMenu.word); setContextMenu(null); }}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  width: "100%", padding: "9px 14px", background: "transparent",
+                  border: "none", color: addingWord ? "rgba(255,255,255,0.3)" : "#e8e8f0",
+                  fontSize: 13, fontFamily: "sans-serif",
+                  cursor: addingWord ? "wait" : "pointer", textAlign: "left",
+                }}
+              >
+                <span style={{
+                  display: "inline-flex", alignItems: "center", justifyContent: "center",
+                  width: 22, height: 22, borderRadius: 5,
+                  background: addingWord ? "rgba(255,255,255,0.05)" : "rgba(139,92,246,0.18)",
+                  color:      addingWord ? "rgba(255,255,255,0.2)"  : "#a78bfa",
+                  fontSize: 13, fontWeight: 700, flexShrink: 0,
+                }}>
+                  {addingWord ? "…" : "+"}
+                </span>
+                {addingWord ? "Adding…" : "Add to Dictionary"}
+              </button>
+              <div style={{
+                padding: "5px 14px", fontSize: 10, fontFamily: "monospace",
+                color: "rgba(255,255,255,0.18)", borderTop: "1px solid rgba(255,255,255,0.06)",
+              }}>
+                Word will be saved to .pwl
+              </div>
             </div>
           )}
         </div>
